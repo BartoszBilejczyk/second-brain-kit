@@ -16,4 +16,4 @@ The skill will ask which model (fast/balanced/accurate) and which language, then
 
 ---
 
-Recordings are **not committed to git** by default (configured during setup). They stay local unless you explicitly push them. Your voice data is yours.
+Recordings are **not committed to git** by default — but only after you run `/brain-setup` or `python setup/setup.py`, which adds this folder to `.gitignore`. If you drop files here before running setup, do a quick `git status` to confirm they aren't being tracked. Your voice data is yours.

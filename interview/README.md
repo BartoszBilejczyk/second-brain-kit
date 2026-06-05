@@ -39,13 +39,13 @@ Here's what the prompt looks like when filled in. Use this as a model:
 
 ```
 About me:
-I'm an Instagram influencer and content creator. I post about lifestyle, relationships, personal growth, and aesthetics. I've been building my personal brand for 3 years. I have a partner who I talk about occasionally in my content. I'm Polish, living in Warsaw, but my content is bilingual.
+I'm a content creator and Instagram influencer. I post about lifestyle, relationships, personal growth, and aesthetics. I've been building my personal brand for about 3 years. My audience is mostly people my age who are figuring out life — career, relationships, identity.
 
 My context:
-Content creation and personal brand are my main focus. I also care deeply about relationships (I believe authenticity in relationships is the foundation of everything), money (I grew up without it and now I'm learning a new relationship with it), aesthetics and taste (my visual identity is very intentional), and personal growth (but not the toxic positivity kind).
+Content creation is my main focus. I also care deeply about relationships (I think how you connect with people is a reflection of who you are), money (I'm still working out my relationship with it — earning from content feels different to earning from a "real job"), and personal growth (the honest kind, not the toxic positivity kind).
 
 What I want from the brain:
-Mainly to help me write captions, scripts, and post ideas that sound genuinely like me — not like AI content. I also want it to help me find my unique angles on topics and remember the specific stories and opinions that make me different from other creators.
+Mainly to write captions, scripts, and post ideas that sound genuinely like me — not like AI content. I also want to find my unique angles on topics and remember the specific stories and opinions that make me different from other creators.
 
 Specific topics I want covered:
 - Why I create content (not the "I want to inspire people" answer — the real one)

@@ -8,22 +8,44 @@
 
 ## beliefs/
 
+*(empty)*
+
 ## opinions/
+
+*(empty)*
 
 ## work/
 
+*(empty)*
+
 ## money/
+
+*(empty)*
 
 ## relationships/
 
+*(empty)*
+
 ## mind/
+
+*(empty)*
 
 ## voice-profile/
 
+*(empty)*
+
 ## people/
+
+*(empty)*
 
 ## concepts/
 
+*(empty)*
+
 ## synthesis/
 
+*(empty)*
+
 ## sources/
+
+*(empty)*

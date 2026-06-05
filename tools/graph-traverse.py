@@ -18,7 +18,7 @@ from pathlib import Path
 
 REPO_ROOT = Path(__file__).parent.parent
 WIKI_DIR = REPO_ROOT / "wiki"
-LINK_RE = re.compile(r"\[\[([^\]]+)\]\]")
+LINK_RE = re.compile(r"\[\[([^\]|]+?)(?:\|[^\]]*?)?\]\]")
 TITLE_RE = re.compile(r"^title:\s*(.+)$", re.MULTILINE)
 
 

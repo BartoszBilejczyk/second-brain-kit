@@ -24,6 +24,14 @@ import argparse
 from pathlib import Path
 from datetime import date
 
+
+def title_to_slug(title: str) -> str:
+    """Convert a page title to a safe filename stem."""
+    slug = title.lower()
+    slug = re.sub(r"[^\w\s-]", "", slug)
+    slug = re.sub(r"[\s_]+", "-", slug)
+    return slug.strip("-")
+
 REPO_ROOT = Path(__file__).parent.parent
 WIKI_ROOT = REPO_ROOT / "wiki"
 INDEX_PATH = REPO_ROOT / "index.md"
@@ -114,12 +122,19 @@ def cmd_rename(old_title: str, new_title: str, dry_run: bool):
     update_frontmatter_title(page_file, old_title, new_title, dry_run)
     total = replace_links_across_vault(old_title, new_title, dry_run)
     update_index(old_title, new_title, dry_run)
-    append_log("rename", old_title, new_title, total, dry_run)
 
+    # Rename the physical file to match the new title
+    new_slug = title_to_slug(new_title)
+    new_file = page_file.parent / f"{new_slug}.md"
+    if new_file != page_file:
+        if dry_run:
+            print(f"  [dry-run] Would rename {page_file.name} → {new_file.name}")
+        else:
+            page_file.rename(new_file)
+            print(f"  Renamed file: {page_file.name} → {new_file.name}")
+
+    append_log("rename", old_title, new_title, total, dry_run)
     print(f"\nDone. {total} link{'s' if total != 1 else ''} updated across the vault.")
-    if not dry_run:
-        print("Note: the .md filename was NOT renamed — only the title field and links.")
-        print("If you want to rename the file too, do it manually and run a follow-up fix-link.")
 
 
 def cmd_fix_link(wrong_text: str, correct_title: str, dry_run: bool):

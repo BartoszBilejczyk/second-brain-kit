@@ -23,10 +23,10 @@ This script reads all wiki pages, builds the link graph, and prints a structured
 
 The 6 checks, in priority order:
 
-1. **BROKEN_LINKS** — `[[Title]]` references with no matching page. Distinguish genuine breakage from intentional to-write markers (look for `_(do stworzenia)_` near the link).
+1. **BROKEN_LINKS** — `[[Title]]` references with no matching page. Distinguish genuine breakage from intentional to-write markers (look for `_(to write)_` near the link).
 2. **ORPHANS** — pages with 0 inbound links. Content orphans need something linking to them. Source orphans are systemic (wiki pages don't back-link to source pages) — flag as known pattern, not urgent.
 3. **INDEX_DRIFT** — pages on disk missing from `index.md`, or `index.md` entries with no file. Both directions are errors.
-4. **THIN_LINKS** — pages with 3+ `_Powiązane:_` entries but 0 inline `[[links]]` in the body. The connections exist on paper but aren't wired into the text — `brain-query` can't traverse them. Flag as "inline enrichment candidates."
+4. **THIN_LINKS** — pages with 3+ `_Related:_` entries but 0 inline `[[links]]` in the body. The connections exist on paper but aren't wired into the text — `brain-query` can't traverse them. Flag as "inline enrichment candidates."
 5. **LOW_INLINE_DENSITY** — recently updated pages with <3 inline links, split by severity:
    - `[ERROR]` — 0 inline links. `brain-query` has nothing to traverse from this page. Fix immediately.
    - `[WARN]` — 1–2 inline links. Sparse but not empty — informational, address in bulk enrichment passes, not urgently.
@@ -59,4 +59,4 @@ Brain-lint does **not** check: synthesis quality, voice fidelity, coverage gaps,
 
 ## Why it matters
 
-Structural rot is silent. A broken link means `brain-query` silently drops a connection it would have followed. An orphan page means an insight exists but nothing leads to it. Thin links mean the graph exists on paper but not in practice — `brain-query` traverses inline links, not just `_Powiązane:_` lists.
+Structural rot is silent. A broken link means `brain-query` silently drops a connection it would have followed. An orphan page means an insight exists but nothing leads to it. Thin links mean the graph exists on paper but not in practice — `brain-query` traverses inline links, not just `_Related:_` lists.

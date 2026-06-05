@@ -25,7 +25,7 @@ Request: `$ARGUMENTS`
    ```bash
    python tools/graph-traverse.py "<seed-title>" --hops 2 --max 15 --repo-relative
    ```
-   This returns pages ordered by hop distance (0 = seed, 1 = direct links, 2 = two hops away). Read all hop-0 and hop-1 pages; read hop-2 pages selectively if they look relevant. Cross-domain connections at hop-2 are often where the non-obvious insight lives — a page about Poland that reaches `wewnetrzna-motywacja` in two hops carries real signal.
+   This returns pages ordered by hop distance (0 = seed, 1 = direct links, 2 = two hops away). Read all hop-0 and hop-1 pages; read hop-2 pages selectively if they look relevant. Cross-domain connections at hop-2 are often where the non-obvious insight lives — a belief page that reaches a core identity page in two hops carries real signal.
 
 3. **Stay grounded.** Synthesize only from what the wiki actually says. Do not invent views the user hasn't expressed. Where the wiki is silent or thin, say so plainly rather than filling the gap with a generic guess.
 
@@ -39,7 +39,7 @@ Request: `$ARGUMENTS`
 
 ## Scaling past ~100 pages
 
-Semantic seed discovery (`embed-wiki.py`) + graph traversal (`graph-traverse.py`) is already in place. At ~150 pages, if queries still feel expensive, increase `--top` from 5 to 3 and `--hops` from 2 to 1 to stay within budget. See `tooling.md` in this skill directory for further options.
+Semantic seed discovery (`embed-wiki.py`) + graph traversal (`graph-traverse.py`) is already in place. At ~150 pages, if queries feel expensive, decrease `--top` from 5 to 3 and `--hops` from 2 to 1 to stay within context budget.
 
 ## Why it matters
 

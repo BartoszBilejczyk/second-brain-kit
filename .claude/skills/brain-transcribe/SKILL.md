@@ -58,6 +58,18 @@ Map choices to Whisper models:
 
 ## Step 4 — Transcribe
 
+Before transcribing, verify the virtual environment is active:
+```bash
+python -c "import sys; print('venv active' if sys.prefix != sys.base_prefix else 'NO VENV')"
+```
+If the output is `NO VENV`, stop and tell the user to run `source .venv/bin/activate` (Mac/Linux) or `.venv\Scripts\activate` (Windows) in their terminal, then restart Claude Code.
+
+Also verify Whisper is importable:
+```bash
+python -c "import whisper; print('whisper ok')"
+```
+If this fails, tell the user to run `pip install -r tools/requirements.txt` with the venv active.
+
 **Single file:**
 ```bash
 python tools/transcribe_audio.py "<audio_path>" --model <model> --language <lang> --output "raw/transcripts/<stem>.md"

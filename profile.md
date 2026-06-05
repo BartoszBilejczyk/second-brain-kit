@@ -1,34 +1,35 @@
 # Profile
 
-*(Written and maintained by brain-ingest. Enriched after each batch — never replaced. Survives context resets.)*
+*(Written and maintained by brain-ingest. Enriched after each batch — never replaced.)*
 
 ## Identity
 
-**Name/alias:** User  
-*(Updated by /brain-setup)*
+**Name/alias:** User
 
-**In one sentence:** [Who are you? brain-ingest will fill this in after your first interview session.]
+**In one sentence:** [brain-ingest will fill this in after your first interview session]
 
 ## Current situation
 
-[brain-ingest updates this section after each batch. It captures what's actively happening in your life — projects, transitions, decisions in progress.]
+*Run `/brain-setup` to configure your brain.*
+
+Goal: Build a personal knowledge base in my voice
 
 ## Settled beliefs
 
-[High-confidence views that have appeared consistently across sessions. brain-ingest builds this list from wiki/beliefs/ pages.]
+*(none yet — populated by brain-ingest)*
 
 ## Defining stories
 
-[Key experiences or chapters that shaped who you are. These are the stories you keep returning to.]
+*(none yet)*
 
 ## How you work / create
 
-[Your operating style, creative process, what energizes vs. drains you.]
+*(none yet)*
 
 ## Key relationships
 
-[People who matter — your partner, close friends, collaborators, mentors. Kept at the level of role + one sentence.]
+*(none yet)*
 
 ## Open questions
 
-[Things you're actively figuring out. Not tensions or contradictions — those go in meta/tensions.md. These are genuine questions you're sitting with.]
+*(none yet)*

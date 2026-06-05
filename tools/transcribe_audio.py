@@ -14,6 +14,7 @@ Examples:
 
 import argparse
 import sys
+from datetime import date
 from pathlib import Path
 
 try:
@@ -52,12 +53,20 @@ def transcribe_audio(
         verbose=True
     )
 
-    transcription = result["text"]
+    transcription = result["text"].strip()
 
     if output_path:
         output_file = Path(output_path)
         output_file.parent.mkdir(parents=True, exist_ok=True)
-        output_file.write_text(transcription, encoding="utf-8")
+        frontmatter = (
+            f"---\n"
+            f"source: {Path(audio_path).name}\n"
+            f"language: {language or 'unknown'}\n"
+            f"date: {date.today().isoformat()}\n"
+            f"model: {model_name}\n"
+            f"---\n\n"
+        )
+        output_file.write_text(frontmatter + transcription, encoding="utf-8")
         print(f"\nTranscript saved to: {output_path}")
 
     return transcription

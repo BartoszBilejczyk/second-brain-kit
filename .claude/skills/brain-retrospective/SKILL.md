@@ -50,7 +50,7 @@ Root causes to consider:
 ### 4. Strategic observations
 Step back from individual findings. What does this session reveal about the system overall?
 - Is the wiki growing faster than quality can keep up?
-- Are certain domains (work, mind, together-games) better maintained than others?
+- Are certain domains (work, mind, money) better maintained than others?
 - Is there a mismatch between what brain-query needs and what brain-ingest produces?
 - Is token cost a problem — are skill runs getting too expensive as the wiki grows?
 

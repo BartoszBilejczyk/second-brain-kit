@@ -211,3 +211,9 @@ You have coaching sessions, performance reviews, or career reflections you want 
 python tools/build-graph.py          # rebuild wiki-graph.json
 python tools/embed-wiki.py           # incremental re-embed (only changed pages, ~3s)
 ```
+
+---
+
+## Multi-agent skill discovery
+
+Skills are in `.claude/skills/<name>/SKILL.md` (Claude Code) and mirrored via symlinks at `.agents/skills/<name>/` (Codex CLI, Gemini CLI). Both paths point to the same SKILL.md files — one source of truth.

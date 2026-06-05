@@ -30,16 +30,15 @@ For each page being reviewed, read it. Also spot-check 1-2 source files (from `r
 - Are claims traceable to a source in the frontmatter?
 
 ### 2. Cross-linking (inline-first)
-- Are links embedded inline at the sentence where the concept appears — or only in `_Powiązane:_` at the bottom? Inline is the standard; bottom-only is thin linking.
+- Are links embedded inline at the sentence where the concept appears — or only in `_Related:_` at the bottom? Inline is the standard; bottom-only is thin linking.
 - Do links go both ways? If page A links to page B, does page B link back to A where it makes sense?
 - Are there isolated pages — pages with few or no outgoing links? Isolation is a smell; everything connects to something.
 - Are any links to pages that clearly should exist but don't (i.e., obvious gaps in the wiki)?
 
 ### 3. Voice fidelity
-- Does the wiki sound like the user — first-person, concrete examples before principles, contrarian streak?
-- Any em-dashes (—)? His rule: use hyphens (-), not em-dashes.
-- Does the language match the content — Polish for personal/belief/identity topics, English or mixed for technical/work topics?
-- Does it feel like him speaking, or like a summary written about him?
+- Does the wiki sound like the user — first-person, in their voice, not like a summary written about them?
+- Read `wiki/voice-profile/` pages for their specific style rules: rhythm, phrases they use, things they never say. Check against those.
+- Does the language match the user's preferred language from the `## User` section in `CLAUDE.md`?
 
 ### 4. Coverage gaps
 - Read the source(s) and identify 2-3 ideas that were significant in the recording but have no wiki page. Note them — they're candidates for the next batch or a follow-up.

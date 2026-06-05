@@ -7,18 +7,21 @@ Or via the /brain-setup Claude Code skill.
 
 This script:
   1. Checks Python >= 3.13
-  2. Asks 4 questions to configure your brain
-  3. Writes the ## User section to CLAUDE.md
-  4. Writes a starter profile.md
-  5. Updates .gitignore based on your recordings privacy choice
-  6. Warns you about download sizes
-  7. Runs pip install -r tools/requirements.txt
-  8. Runs a small test embed to confirm tooling works
+  2. Creates a .venv virtual environment if not already in one
+  3. Asks 4 questions to configure your brain
+  4. Writes the ## User section to CLAUDE.md
+  5. Writes a starter profile.md
+  6. Updates .gitignore based on your recordings privacy choice
+  7. Warns you about download sizes
+  8. Runs pip install -r tools/requirements.txt
+  9. Runs a small test embed to confirm tooling works
 """
 
+import os
 import sys
 import subprocess
 import re
+import venv
 from pathlib import Path
 from datetime import date
 
@@ -27,6 +30,7 @@ CLAUDE_MD = REPO_ROOT / "CLAUDE.md"
 PROFILE_MD = REPO_ROOT / "profile.md"
 GITIGNORE = REPO_ROOT / ".gitignore"
 REQUIREMENTS = REPO_ROOT / "tools" / "requirements.txt"
+VENV_PATH = REPO_ROOT / ".venv"
 
 
 def check_python_version():
@@ -38,6 +42,29 @@ def check_python_version():
         sys.exit(1)
 
 
+def ensure_venv():
+    """If not running inside a venv, create .venv and re-exec this script inside it."""
+    if sys.prefix == sys.base_prefix:
+        # Not in a venv — create one and restart
+        if not VENV_PATH.exists():
+            print(f"Creating virtual environment at .venv/ ...")
+            venv.create(str(VENV_PATH), with_pip=True)
+            print("Done.\n")
+        else:
+            print("Found existing .venv/ — using it.\n")
+
+        if sys.platform == "win32":
+            venv_python = VENV_PATH / "Scripts" / "python.exe"
+        else:
+            venv_python = VENV_PATH / "bin" / "python3"
+            if not venv_python.exists():
+                venv_python = VENV_PATH / "bin" / "python"
+
+        print("Restarting inside virtual environment...\n")
+        os.execv(str(venv_python), [str(venv_python)] + sys.argv)
+        # os.execv replaces this process — nothing below runs
+
+
 def ask(prompt: str, default: str = "") -> str:
     """Ask a question; return stripped answer or default."""
     if default:
@@ -47,30 +74,44 @@ def ask(prompt: str, default: str = "") -> str:
         return input(f"{prompt}: ").strip()
 
 
+def get_current_user_name() -> str:
+    """Return the current Name/alias from CLAUDE.md, or empty string if default/missing."""
+    try:
+        content = CLAUDE_MD.read_text(encoding="utf-8")
+        match = re.search(r"^Name/alias:\s*(.+)$", content, re.MULTILINE)
+        if match:
+            name = match.group(1).strip()
+            return "" if name == "User" else name
+    except FileNotFoundError:
+        pass
+    return ""
+
+
 def write_user_section(name: str, goal: str, language: str):
     """Update the ## User section in CLAUDE.md."""
     content = CLAUDE_MD.read_text(encoding="utf-8")
 
-    new_section = f"""## User
+    new_section = (
+        f"## User\n\n"
+        f"Name/alias: {name}\n"
+        f"Goal: {goal}\n"
+        f"Language: {language}\n\n"
+        f"*(This section is written by `/brain-setup` during onboarding. Update it any time.)*"
+    )
 
-Name/alias: {name}
-Goal: {goal}
-Language: {language}
-
-*(This section is written by `/brain-setup` during onboarding. Update it any time.)*"""
-
-    # Replace the existing ## User section
-    pattern = r"## User\n.*?(?=\n---|\n## )"
-    replacement = new_section
-    new_content = re.sub(pattern, replacement, content, flags=re.DOTALL)
-
-    if new_content == content:
-        # Section not found with regex — append it after the first ---
+    # Match ## User section up to the next --- or ## heading
+    pattern = r"## User\n[\s\S]*?(?=\n---|\n## )"
+    if re.search(pattern, content):
+        new_content = re.sub(pattern, new_section, content)
+    else:
+        # Section not found — append after the first ---
         lines = content.split("\n")
-        insert_at = next((i for i, l in enumerate(lines) if l == "---"), None)
+        insert_at = next((i for i, l in enumerate(lines) if l.strip() == "---"), None)
         if insert_at is not None:
             lines.insert(insert_at + 1, "\n" + new_section + "\n")
-            new_content = "\n".join(lines)
+        else:
+            lines.append("\n" + new_section)
+        new_content = "\n".join(lines)
 
     CLAUDE_MD.write_text(new_content, encoding="utf-8")
     print(f"  ✓ CLAUDE.md updated with your profile")
@@ -124,13 +165,11 @@ def update_gitignore_for_recordings(exclude_recordings: bool):
     content = GITIGNORE.read_text(encoding="utf-8")
 
     if exclude_recordings:
-        # Uncomment the line if it's commented out
         new_content = content.replace(
             "# interview/recordings/",
             "interview/recordings/"
         )
         if new_content == content:
-            # Not present — add it
             new_content = content.rstrip() + "\ninterview/recordings/\n"
         GITIGNORE.write_text(new_content, encoding="utf-8")
         print("  ✓ Recordings excluded from git (added to .gitignore)")
@@ -180,25 +219,34 @@ def run_test_embed() -> bool:
     print("\nRunning a test embed to confirm everything works...")
     print("(This triggers the ~420MB model download on first run)\n")
 
-    # Write a tiny test wiki page
     test_dir = REPO_ROOT / "wiki" / "concepts"
     test_file = test_dir / "_setup-test.md"
+    test_embeddings = REPO_ROOT / "meta" / "embeddings.json"
+    had_existing_embeddings = test_embeddings.exists()
+
     test_file.write_text(
         "---\ntitle: Setup Test\ntype: concept\ncreated: 2025-01-01\nupdated: 2025-01-01\nconfidence: high\nlang: en\n---\nThis page confirms the embedding tooling works.\n",
         encoding="utf-8"
     )
 
-    result = subprocess.run(
-        [sys.executable, str(REPO_ROOT / "tools" / "embed-wiki.py")],
-        cwd=REPO_ROOT,
-        capture_output=False,
-    )
-
-    # Clean up test page
-    test_file.unlink(missing_ok=True)
-    # Clean up embeddings (they'd just have the test entry)
-    embeddings_file = REPO_ROOT / "meta" / "embeddings.json"
-    embeddings_file.unlink(missing_ok=True)
+    try:
+        result = subprocess.run(
+            [sys.executable, str(REPO_ROOT / "tools" / "embed-wiki.py")],
+            cwd=REPO_ROOT,
+            capture_output=False,
+        )
+    finally:
+        test_file.unlink(missing_ok=True)
+        # Only delete embeddings if we created them — don't destroy a pre-existing cache
+        if not had_existing_embeddings:
+            test_embeddings.unlink(missing_ok=True)
+        else:
+            # Remove just the test entry by re-running embed (it will drop the deleted page)
+            subprocess.run(
+                [sys.executable, str(REPO_ROOT / "tools" / "embed-wiki.py")],
+                cwd=REPO_ROOT,
+                capture_output=True,
+            )
 
     if result.returncode != 0:
         print("\n⚠  Test embed had issues. The brain will still work — semantic search may need troubleshooting.")
@@ -210,6 +258,10 @@ def run_test_embed() -> bool:
 
 
 def main():
+    # Step 0 — checks before any interaction
+    check_python_version()
+    ensure_venv()  # may re-exec this script inside .venv — nothing below runs if so
+
     print("\n" + "=" * 60)
     print("  Welcome to second-brain-kit setup")
     print("=" * 60)
@@ -218,8 +270,19 @@ def main():
     print("and install the Python tools you'll need.")
     print()
 
-    # Step 0 — Python version check
-    check_python_version()
+    # Detect re-run
+    existing_name = get_current_user_name()
+    if existing_name:
+        print(f"  Your brain is already configured as '{existing_name}'.")
+        update_answer = ask("  Update settings or just re-install dependencies? (update/deps)", default="deps")
+        if update_answer.strip().lower() == "deps":
+            print_download_warning()
+            input("  Press Enter to re-install dependencies (or Ctrl+C to skip)...")
+            pip_ok = run_pip_install()
+            if pip_ok:
+                run_test_embed()
+            print(f"\n  Done. Your brain is still configured as '{existing_name}'.")
+            return
 
     # Step 1 — Name
     print("━" * 60)

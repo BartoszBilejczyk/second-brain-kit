@@ -39,28 +39,40 @@ This requires a terminal and a bit of comfort with it. If you're setting this up
 
 ### 1. Create your repo
 
-Click **"Use this template"** on GitHub → **Create a new repository**. This gives you a fresh repo with no shared history — your brain, not a fork.
+On GitHub, click **"Use this template"** → **Create a new repository**. This gives you a fresh repo with no shared history — your brain, not a fork.
 
-### 2. Clone it
+> If the "Use this template" button isn't visible, enable "Template repository" in your repo's Settings → General. Users who clone from you will see the button on your repo.
+
+### 2. Clone and set up a Python environment
 
 ```bash
 git clone https://github.com/you/your-brain-repo.git
 cd your-brain-repo
+python3 -m venv .venv
+source .venv/bin/activate   # Windows: .venv\Scripts\activate
 ```
 
-### 3. Open in Claude Code
+The virtual environment keeps the AI model downloads isolated from your system Python.
+
+### 3. Run setup
+
+**Option A — via Claude Code (recommended):**
 
 ```bash
 claude
 ```
 
-Then run:
+Then run `/brain-setup`. The skill will walk you through everything interactively.
 
-```
-/brain-setup
+**Option B — via CLI only (no Claude Code needed):**
+
+```bash
+python setup/setup.py
 ```
 
-That's it. The setup skill will ask you a few questions, configure your profile, and walk you through the interview step.
+Same questions, same result. Use this if you're setting up on behalf of someone else or don't have Claude Code yet.
+
+The setup configures your profile, installs Python dependencies, and runs a test embed to confirm everything works.
 
 ---
 
@@ -71,14 +83,14 @@ The first time you run `/brain-ingest`, it will download the AI models locally:
 | Component | Size | When |
 |-----------|------|------|
 | Sentence-transformers model | ~420 MB | First ingest (semantic search) |
-| PyTorch | ~700 MB | First ingest |
+| PyTorch | ~700 MB (GPU) / ~200 MB (CPU-only) | First ingest |
 | Whisper tiny model | ~75 MB | First `/brain-transcribe` with "fast" |
 | Whisper small model | ~460 MB | First `/brain-transcribe` with "balanced" |
 | Whisper medium model | ~1.5 GB | First `/brain-transcribe` with "accurate" |
 
 **Total first run: ~1.2 GB (tiny) to ~2.6 GB (medium).** This is a one-time download. After that, everything runs fully offline. No API calls, no data leaves your machine.
 
-The `/brain-setup` skill will warn you and run a test download before you need it.
+`/brain-setup` warns you about sizes and pre-downloads the sentence-transformers model (~420 MB + PyTorch). Whisper downloads separately the first time you run `/brain-transcribe` — expect a pause of 30 seconds to several minutes depending on which model you pick.
 
 ---
 
@@ -114,12 +126,6 @@ Your name (or nickname) appears in Claude Code sessions so the AI knows what to 
 
 ---
 
-## Open in Obsidian
-
-Open this folder in [Obsidian](https://obsidian.md) to see your wiki as a visual graph. Every `[[wikilink]]` becomes an edge.
-
----
-
 ## Skill quick reference
 
 | Skill | What it does |
@@ -136,6 +142,12 @@ Open this folder in [Obsidian](https://obsidian.md) to see your wiki as a visual
 
 ---
 
+## Multi-agent support
+
+Skills follow the `.agents/skills/<name>/SKILL.md` convention supported by Codex CLI and Gemini CLI. The `.agents/skills/` directory contains symlinks to the same files in `.claude/skills/` — one SKILL.md, all agents. See each tool's docs for how to invoke skills.
+
+---
+
 ## Fork and adapt
 
-Open source. Clone it, change it, make it yours. The skills are in `.claude/skills/` — plain markdown files you can edit directly.
+Open source (MIT). Clone it, change it, make it yours. The skills are in `.claude/skills/` — plain markdown files you can edit directly. See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.

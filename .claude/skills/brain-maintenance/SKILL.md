@@ -20,7 +20,7 @@ Run the appropriate level based on `$ARGUMENTS` or time since last maintenance (
 ### Daily (< 2 min)
 Triggered when: last entry in log.md was today or yesterday.
 
-1. Read `hot.md` — is it still accurate? Update current situation if something shifted (new job, new TG milestone, change in plans).
+1. Read `hot.md` — is it still accurate? Update current situation if something shifted (new job, new project milestone, change in plans).
 2. Check `profile.md` "current situation" — if it references something that's now past (e.g., "leaving job mid-July" after July), update it.
 3. Done. Log: `## [date] maintenance | daily check`.
 
