@@ -20,5 +20,5 @@ env/
 # Whisper model cache (stored in ~/.cache, not the repo)
 # — no action needed, listed here for clarity
 
-# Audio recordings (added by setup.py if you chose to keep them local-only)
-# interview/recordings/
+# Audio recordings — kept local only, not pushed to GitHub
+interview/recordings/

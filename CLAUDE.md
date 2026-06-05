@@ -8,9 +8,9 @@ This file is read by Claude Code (and other AI assistants via AGENTS.md) at the 
 
 ## User
 
-Name/alias: User
-Goal: Build a personal knowledge base in my own voice
-Language: English
+Name/alias: (set by /brain-setup)
+Goal: (set by /brain-setup)
+Language: (set by /brain-setup)
 
 *(This section is written by `/brain-setup` during onboarding. Update it any time.)*
 
@@ -100,7 +100,15 @@ lang: en | pl | mixed | <your language code>
 
 ---
 
-## 3. The operating loop (skills)
+## 3. Interaction conventions
+
+**For short structured choices** (yes/no, pick one from a small list): use `AskUserQuestion`.
+
+**For open-ended or multi-part input** (free-form context, setup questions where the user needs to think and type): ask as plain text. A numbered list works well when collecting several answers at once. Wait for the user's full reply before proceeding.
+
+---
+
+## 4. The operating loop (skills)
 
 - **brain-ingest** — turn new `raw/` files or interview transcripts into `wiki/` pages
 - **brain-query** — answer a question or generate content in the user's voice, grounded in the wiki
@@ -114,7 +122,7 @@ lang: en | pl | mixed | <your language code>
 
 ---
 
-## 4. Voice profile
+## 5. Voice profile
 
 *(This section is populated by brain-ingest after interview answers are processed. The voice profile grows from wiki/voice-profile/ pages. The AI should read those pages rather than relying on a static block here.)*
 
@@ -124,7 +132,7 @@ When writing content in the user's voice, always read:
 
 ---
 
-## 5. System health principles
+## 6. System health principles
 
 ### Reliability
 - A `[[link]]` must always resolve. Broken link = silent data loss for brain-query.

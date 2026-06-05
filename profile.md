@@ -4,15 +4,13 @@
 
 ## Identity
 
-**Name/alias:** User
+**Name/alias:** (set by /brain-setup)
 
 **In one sentence:** [brain-ingest will fill this in after your first interview session]
 
 ## Current situation
 
 *Run `/brain-setup` to configure your brain.*
-
-Goal: Build a personal knowledge base in my voice
 
 ## Settled beliefs
 

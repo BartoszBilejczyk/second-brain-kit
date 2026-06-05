@@ -32,21 +32,14 @@ Say something like:
 
 ---
 
-## Step 2 — Collect answers conversationally
+## Step 2 — Collect answers
 
-Ask these 4 questions one at a time:
+Ask all four questions as a single numbered list in plain text. Wait for the user to reply with their answers before proceeding.
 
-**Q1 — Name:**
-> "What should I call you? This appears in your Claude sessions so the AI knows who you are. A nickname is totally fine — it doesn't have to be your real name. (Press Enter to use 'User'.)"
-
-**Q2 — Goal:**
-> "What's the main thing you want to use this brain for? For example: 'Generate Instagram content in my voice', 'Think through career decisions', 'Write with my authentic perspective'."
-
-**Q3 — Language:**
-> "What language will you mainly use? The brain handles any language — English, Polish, Spanish, bilingual, etc."
-
-**Q4 — Recordings privacy:**
-> "Should your voice recordings be excluded from git? This means they stay on your machine and won't be pushed to GitHub even if you push the rest of your brain. Recordings can be personal and are often large. [Y/n, default Y]"
+> 1. What should I call you? (A nickname is fine — it appears in Claude sessions so the AI knows who you are.)
+> 2. What's the main thing you want to use this brain for?
+> 3. What language will you mainly use?
+> 4. Should your voice recordings be excluded from git? They'll stay on your machine and won't be pushed to GitHub. Recommended if recordings are personal or large. (yes/no, default yes)
 
 ---
 
@@ -88,25 +81,18 @@ Warn the user about download sizes first:
 
 If `$ARGUMENTS` contains `--skip-install`, skip this step.
 
-Before running pip, check whether a virtual environment is active:
-```bash
-python -c "import sys; print('venv active' if sys.prefix != sys.base_prefix else 'NO VENV')"
-```
-
-If the output is `NO VENV`, stop and tell the user:
-> "You need to activate a virtual environment first. In your terminal, run:
-> ```
-> python3 -m venv .venv
-> source .venv/bin/activate   # Windows: .venv\Scripts\activate
-> ```
-> Then restart Claude Code and run `/brain-setup` again."
-
-Once confirmed active, run:
+Run directly:
 ```bash
 pip install -r tools/requirements.txt
 ```
 
-If it fails for another reason: show the exact error and suggest checking Python version (`python --version`, need 3.13+).
+If it fails with `externally-managed-environment`: tell the user they need a venv because their Python is system-managed. Suggest:
+```
+python3 -m venv .venv && source .venv/bin/activate
+```
+Then re-run the install.
+
+If it fails for any other reason: show the exact error and suggest checking Python version (`python --version`, need 3.10+).
 
 ---
 
@@ -125,20 +111,38 @@ If it fails: note the issue but don't block the user. Tell them to re-run `pytho
 
 ## Step 6 — Next steps
 
-Tell the user:
+Explain the full picture as plain text — the user must understand what to do next without reading any README:
 
-> **You're set up. Here's what to do next:**
+> **Your brain is configured but empty. Here's how it comes alive.**
 >
-> 1. **Generate your interview questions** — open `interview/README.md`. It has a prompt template you paste into any LLM to generate questions personalized to you.
+> The brain learns from *you* — your words, your stories, your way of thinking. The raw material is answers: to questions about your life, beliefs, decisions, opinions. Once you provide that material, `/brain-ingest` handles everything — transcribing, synthesizing, linking it all into a searchable wiki in your voice.
 >
-> 2. **Record your answers** — talk freely into your phone. Drop the file into `interview/recordings/`. Tangents are the best material.
+> **There are a few ways to get started:**
 >
-> 3. **Transcribe:** `/brain-transcribe`
+> **Let Claude generate your questions (recommended).** Tell me what you want this brain for — what's going on in your life, what you're trying to figure out, what you'd want to be able to ask in 6 months. The more context you give, the more tailored the questions. I'll generate a personalized list you can start answering right away. You can answer them by recording yourself (voice memo on your phone is perfect) or just by writing.
 >
-> 4. **Ingest:** `/brain-ingest` — this builds your wiki from the transcript.
+> **Start talking without questions.** You don't need a structured list first. Record yourself — stream of consciousness, whatever's on your mind. Drop the file into `interview/recordings/`, run `/brain-transcribe` then `/brain-ingest`. Done.
 >
-> 5. **Query:** `/brain-query "what do I actually think about X?"`
+> **Write instead of record.** Prefer typing? Drop a text file into `raw/sources/` and run `/brain-ingest` directly.
+>
+> However you add material — once it's ingested, you can ask `/brain-query "what do I actually think about X?"` and get answers grounded in your own words.
 
-Then ask: "Want me to show you the interview question prompt template now?"
+Then ask as plain text:
 
-If yes — show them the blank prompt template from `interview/README.md` (the section with the code block to paste into an LLM). Tell them to save the generated questions as `interview/01-identity.md` (or similar).
+> How do you want to start? I can generate a personalized question list right now if you tell me a bit about your goal — or if you already have recordings or written material ready, we can go straight to ingesting.
+
+**If "Generate my questions now":**
+
+Ask as plain text (not AskUserQuestion — needs a free-form response):
+
+> "Tell me what you want this brain to do for you. What's going on in your life right now, what are you trying to figure out, what decisions are you facing? The more you share, the better the questions. Just write — there's no wrong answer."
+
+Wait for their response. Generate a tailored list of 15–20 interview questions based on what they wrote. Questions should be open-ended and personal — designed to draw out beliefs, stories, patterns, and opinions, not facts. Save to `interview/01-questions.md` and tell the user: answer these by recording yourself (voice memo is fine) or writing — then drop the material into `interview/recordings/` or `raw/sources/` and run `/brain-ingest`.
+
+**If "I already have recordings ready":**
+
+Tell them to drop the files into `interview/recordings/` and run `/brain-transcribe` followed by `/brain-ingest`.
+
+**If "I'll write my answers as text":**
+
+Tell them to drop a text file into `raw/sources/` and run `/brain-ingest`.
