@@ -1,0 +1,16 @@
+# Generated embeddings — rebuild locally with: python tools/embed-wiki.py
+meta/embeddings.json
+
+# macOS
+.DS_Store
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+
+# Whisper model cache (stored in ~/.cache, not the repo)
+# — no action needed, listed here for clarity
+
+# Audio recordings (added by setup.py if you chose to keep them local-only)
+# interview/recordings/

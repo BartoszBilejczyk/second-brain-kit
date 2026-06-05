@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python tools/build-graph.py*)",
+      "Bash(python tools/embed-wiki.py*)",
+      "Bash(python tools/wiki-check.py*)",
+      "Bash(python tools/wiki-rename.py*)",
+      "Bash(python tools/graph-traverse.py*)",
+      "Bash(python tools/transcribe_audio.py*)",
+      "Bash(python setup/setup.py*)",
+      "Bash(pip install*)",
+      "Bash(grep*)",
+      "Bash(find*)"
+    ]
+  }
+}

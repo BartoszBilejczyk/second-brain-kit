@@ -1,0 +1,11 @@
+# Core AI/ML dependencies
+# First run will download models — see README for size expectations
+
+# Whisper: audio transcription (OpenAI, runs locally)
+openai-whisper
+
+# Semantic search: multilingual sentence embeddings (~420MB model download on first run)
+sentence-transformers
+
+# PyTorch: required by sentence-transformers and whisper (~700MB)
+torch
