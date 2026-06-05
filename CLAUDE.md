@@ -113,7 +113,7 @@ lang: en | pl | mixed | <your language code>
 - **brain-ingest** — turn new `raw/` files or interview transcripts into `wiki/` pages
 - **brain-query** — answer a question or generate content in the user's voice, grounded in the wiki
 - **brain-lint** — structural health check: broken links, orphans, index drift, thin pages
-- **brain-log** — capture a quick thought directly into the wiki without a raw source
+- **brain-log** — append an entry to `log.md` recording what was ingested, what changed, and any notable outcomes
 - **brain-review** — content quality audit after a brain-ingest run
 - **brain-maintenance** — recurring upkeep: staleness, tensions, profile refresh
 - **brain-retrospective** — system meta-audit: skill quality, patterns, proposals for improvement

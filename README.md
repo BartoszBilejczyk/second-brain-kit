@@ -1,37 +1,46 @@
 # second-brain-kit
 
-Every time you ask an AI for help, it doesn't know who you are.
+Every time you work with an AI, you have to be in the room.
 
-It doesn't know what you believe, how you think, what you've been through, or how you sound. So it gives you generic answers. Useful, maybe. But not *yours*.
+You brief it, you correct it, you bring the judgment it's missing. It can execute — but it can't think like you, because it doesn't know how you think. So the ceiling on what you can delegate stays low.
 
-This kit fixes that. It gives you a personal second brain — a vault of cross-linked markdown pages that captures who you actually are. Once it's built, your AI doesn't answer from training data anymore. It answers from *you*.
+This kit changes that. It gives Claude a persistent, growing model of how you reason — your frameworks, your voice, your priorities, the way you weigh tradeoffs. Once it's built, you can hand Claude work that previously needed you in the room: projects, decisions, automations, content. The output is yours — not because you wrote it, but because Claude knows how you would.
 
-Built on the [Karpathy "LLM Wiki" pattern](https://x.com/karpathy/status/1816531576228053133): just markdown files, wikilinks, and Claude Code skills that do the heavy lifting.
+Built on the [Karpathy "LLM Wiki" pattern](https://x.com/karpathy/status/1816531576228053133): markdown files, wikilinks, and Claude Code skills that do the heavy lifting.
 
 ---
 
-## What you get
+## How it works
 
-- **`/brain-transcribe`** — drop in a voice recording; get a clean transcript
-- **`/brain-ingest`** — AI reads the transcript, writes synthesized wiki pages, links them to everything else you've told it
-- **`/brain-query`** — ask anything; get an answer grounded in your actual views. Or: "write this LinkedIn post as me"
-- **`/brain-lint`** — structural health check: broken links, orphan pages, weak connections
-- **`/brain-log`** — capture a quick thought directly, no recording needed
-- **`/brain-review`** — quality audit after an ingest
-- **`/brain-maintenance`** — recurring upkeep, staleness check, tension resolution
-- **`/brain-retrospective`** — system meta-audit, skill improvement proposals
+You record yourself — voice memos answering questions about your life, work, beliefs, decisions. The AI transcribes and synthesizes those recordings into a cross-linked wiki of pages, each capturing a piece of how you think. The more sessions, the richer the model.
+
+Once the wiki exists, every project you run through Claude is grounded in your actual thinking — not training data defaults.
+
+---
+
+## Skills
+
+| Skill | What it does |
+|-------|-------------|
+| `/brain-setup` | One-time guided setup |
+| `/brain-transcribe` | Transcribe a voice recording → clean transcript |
+| `/brain-ingest` | Process transcripts or text → synthesized wiki pages |
+| `/brain-query` | Answer a question or generate content grounded in your wiki |
+| `/brain-log` | Log what was ingested and what changed |
+| `/brain-review` | Quality audit after an ingest |
+| `/brain-lint` | Structural health check: broken links, orphans, weak connections |
+| `/brain-maintenance` | Recurring upkeep, staleness check, tension resolution |
+| `/brain-retrospective` | System meta-audit, skill improvement proposals |
 
 ---
 
 ## Prerequisites
 
-This requires a terminal and a bit of comfort with it. If you're setting this up for someone else, you can do the install and hand them a working system.
-
 | Tool | What it's for | Install |
 |------|---------------|---------|
 | [Git](https://git-scm.com) | Version control for your brain | Likely already installed |
-| [Python 3.13+](https://python.org/downloads) | Runs the transcription and search tools | [python.org/downloads](https://python.org/downloads) |
-| [Claude Code CLI](https://claude.ai/code) | The AI interface — runs the skills | Requires Anthropic Pro or API key |
+| [Python 3.10+](https://python.org/downloads) | Runs transcription (Whisper) and semantic search | [python.org/downloads](https://python.org/downloads) |
+| [Claude Code](https://claude.ai/code) | Runs the skills — works in the desktop app, VS Code, or CLI | Requires Anthropic Pro or API key |
 
 ---
 
@@ -41,56 +50,42 @@ This requires a terminal and a bit of comfort with it. If you're setting this up
 
 On GitHub, click **"Use this template"** → **Create a new repository**. This gives you a fresh repo with no shared history — your brain, not a fork.
 
-> If the "Use this template" button isn't visible, enable "Template repository" in your repo's Settings → General. Users who clone from you will see the button on your repo.
+> If the "Use this template" button isn't visible, enable "Template repository" in your repo's Settings → General.
 
-### 2. Clone and set up a Python environment
+### 2. Clone it
 
 ```bash
 git clone https://github.com/you/your-brain-repo.git
 cd your-brain-repo
-python3 -m venv .venv
-source .venv/bin/activate   # Windows: .venv\Scripts\activate
 ```
-
-The virtual environment keeps the AI model downloads isolated from your system Python.
 
 ### 3. Run setup
 
-**Option A — via Claude Code (recommended):**
+Open the repo in Claude Code (desktop app, VS Code, or `claude` in terminal) and run:
 
-```bash
-claude
+```
+/brain-setup
 ```
 
-Then run `/brain-setup`. The skill will walk you through everything interactively.
-
-**Option B — via CLI only (no Claude Code needed):**
-
-```bash
-python setup/setup.py
-```
-
-Same questions, same result. Use this if you're setting up on behalf of someone else or don't have Claude Code yet.
-
-The setup configures your profile, installs Python dependencies, and runs a test embed to confirm everything works.
+The skill walks you through configuration, installs dependencies, and gets you to your first interview questions.
 
 ---
 
 ## First-run downloads
 
-The first time you run `/brain-ingest`, it will download the AI models locally:
+Two local tools download models on first use — these run on your machine, not in the cloud:
 
 | Component | Size | When |
 |-----------|------|------|
 | Sentence-transformers model | ~420 MB | First ingest (semantic search) |
-| PyTorch | ~700 MB (GPU) / ~200 MB (CPU-only) | First ingest |
-| Whisper tiny model | ~75 MB | First `/brain-transcribe` with "fast" |
-| Whisper small model | ~460 MB | First `/brain-transcribe` with "balanced" |
-| Whisper medium model | ~1.5 GB | First `/brain-transcribe` with "accurate" |
+| PyTorch | ~200–700 MB | First ingest |
+| Whisper tiny | ~75 MB | First `/brain-transcribe` (fast mode) |
+| Whisper small | ~460 MB | First `/brain-transcribe` (balanced) |
+| Whisper medium | ~1.5 GB | First `/brain-transcribe` (accurate) |
 
-**Total first run: ~1.2 GB (tiny) to ~2.6 GB (medium).** This is a one-time download. After that, everything runs fully offline. No API calls, no data leaves your machine.
+**Total first run: ~1.2–2.6 GB.** One-time download. After that, transcription and search run offline.
 
-`/brain-setup` warns you about sizes and pre-downloads the sentence-transformers model (~420 MB + PyTorch). Whisper downloads separately the first time you run `/brain-transcribe` — expect a pause of 30 seconds to several minutes depending on which model you pick.
+Claude itself runs via the cloud (Claude Code API) — your wiki pages are the context it reads, but the AI is not local.
 
 ---
 
@@ -102,52 +97,32 @@ The first time you run `/brain-ingest`, it will download the AI models locally:
 | small | 460 MB | ~90 sec | Most recordings — recommended |
 | medium | 1.5 GB | ~3–5 min | Accented speech, noisy environments |
 
-The `/brain-transcribe` skill will ask which model you want each time.
-
 ---
 
 ## Privacy
 
-Your data stays on your machine. The AI models run locally. Nothing is pushed anywhere unless you explicitly run `git push`.
-
-By default, voice recordings are **not committed to git** — setup will ask about this. You can keep everything local, or push to a private GitHub repo for backup.
-
-Your name (or nickname) appears in Claude Code sessions so the AI knows what to call you. A nickname is totally fine.
+Voice recordings stay on your machine by default and are not committed to git. Your wiki pages can be kept fully local or backed up to a private GitHub repo — your call.
 
 ---
 
 ## Use cases
 
-**Content creator:** Record what you think about a topic → transcribe → ingest → "write an Instagram caption about this in my voice"
+**Building products:** Run a project brief through Claude with your product instincts already loaded. Less back-and-forth, higher-quality output.
 
-**Journaler:** Write notes or record reflections → ingest → "what patterns do I see in how I handle stress?"
+**Career decisions:** Record your thinking on a big decision → ingest → "given how I think about risk, what am I not seeing here?"
 
-**Career / coaching:** Record coaching sessions → ingest → "what are my blind spots around leadership?"
+**Content creation:** Record what you actually think about a topic → "write a LinkedIn post on this in my voice"
 
----
-
-## Skill quick reference
-
-| Skill | What it does |
-|-------|-------------|
-| `/brain-setup` | One-time guided setup |
-| `/brain-transcribe` | Transcribe audio → transcript |
-| `/brain-ingest` | Process transcripts → wiki pages |
-| `/brain-query` | Answer questions from your wiki |
-| `/brain-log` | Capture a quick thought |
-| `/brain-review` | Quality audit after ingest |
-| `/brain-lint` | Structural health check |
-| `/brain-maintenance` | Recurring upkeep |
-| `/brain-retrospective` | System improvement audit |
+**Automations:** Build Claude-powered workflows that act on your judgment, not generic defaults.
 
 ---
 
 ## Multi-agent support
 
-Skills follow the `.agents/skills/<name>/SKILL.md` convention supported by Codex CLI and Gemini CLI. The `.agents/skills/` directory contains symlinks to the same files in `.claude/skills/` — one SKILL.md, all agents. See each tool's docs for how to invoke skills.
+Skills follow the `.agents/skills/<name>/SKILL.md` convention supported by Codex CLI and Gemini CLI. The `.agents/skills/` directory contains symlinks to `.claude/skills/` — one SKILL.md, all agents.
 
 ---
 
 ## Fork and adapt
 
-Open source (MIT). Clone it, change it, make it yours. The skills are in `.claude/skills/` — plain markdown files you can edit directly. See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+Open source (MIT). Skills are plain markdown files in `.claude/skills/` — edit them directly. See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
