@@ -9,7 +9,7 @@ allowed-tools: Read, Glob, Grep, Edit, Bash
 
 Keep the second brain structurally sound. This is a **structural** tool — it checks links, coverage, and formatting, not content quality or contradictions (that's `brain-review`'s job). Read-and-report by default; only change content when `$ARGUMENTS` contains `--fix`.
 
-**Always read `CLAUDE.md` first** for page conventions and structure.
+**Always read `AGENTS.md` first** for page conventions and structure.
 
 ## Step 1 — run the checker
 
@@ -17,7 +17,7 @@ Keep the second brain structurally sound. This is a **structural** tool — it c
 python tools/wiki-check.py
 ```
 
-This script reads all wiki pages, builds the link graph, and prints a structured report covering all 6 checks. Read the output — do not re-scan files manually. The script is the authoritative source; Claude's job is to interpret the findings and propose fixes.
+This script reads all wiki pages, builds the link graph, and prints a structured report covering all 7 checks. Read the output — do not re-scan files manually. The script is the authoritative source; Claude's job is to interpret the findings and propose fixes.
 
 ## Step 2 — interpret the report
 
@@ -31,6 +31,7 @@ The 6 checks, in priority order:
    - `[ERROR]` — 0 inline links. `brain-query` has nothing to traverse from this page. Fix immediately.
    - `[WARN]` — 1–2 inline links. Sparse but not empty — informational, address in bulk enrichment passes, not urgently.
 6. **FRONTMATTER_GAPS** — missing required frontmatter fields.
+7. **VOICE_SMELLS** `[WARN]` — structural drift patterns detected in page bodies: coach-prose phrases, `X = Y` aphorism formulas, third-person narration about the user. These are warnings, not errors — investigate with `brain-review` to confirm and fix.
 
 ## Step 3 — output
 

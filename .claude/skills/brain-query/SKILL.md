@@ -9,7 +9,11 @@ allowed-tools: Read, Glob, Grep, Write, Edit, Bash
 
 Answer questions, or generate content in the user's voice, grounded in what the second brain actually contains.
 
-**Always read `CLAUDE.md` first** — it holds the voice profile and domain context that make the output sound like the user rather than generic AI.
+**Always read these files first:**
+1. `AGENTS.md` — constitution and domain context
+2. `voice.md` — voice spine (register, vocabulary, metaphors, anti-voice). **Required before any "as me" output — no exceptions.** If voice.md doesn't exist yet, run `/brain-voice` to build it from existing transcripts.
+
+For any "in my voice" or "as me" request: after reading voice.md, also pull the relevant `wiki/voice-profile/` depth pages (e.g. `written-voice.md` for published content, `spoken-to-written.md` for conversion rules, `anti-voice.md` for drift check).
 
 Request: `$ARGUMENTS`
 

@@ -14,7 +14,9 @@ Built on the [Karpathy "LLM Wiki" pattern](https://x.com/karpathy/status/1816531
 
 You record yourself — voice memos answering questions about your life, work, beliefs, decisions. The AI transcribes and synthesizes those recordings into a cross-linked wiki of pages, each capturing a piece of how you think. The more sessions, the richer the model.
 
-Once the wiki exists, every project you run through Claude is grounded in your actual thinking — not training data defaults.
+An alternative is writing the notes yourself rather than recording and then using them as as the brain good for /brain-ingest skill.
+
+Once the wiki exists, every project you run through Claude can be grounded in your actual thinking.
 
 ---
 

@@ -1,6 +1,6 @@
 ---
 name: brain-setup
-description: Guided onboarding for second-brain-kit. Configures the user's name, goal, language, and privacy preferences; writes the ## User section to CLAUDE.md; installs Python dependencies; runs a test embed. Use when the user says "setup", "brain setup", "configure my brain", "get started", or opens Claude Code in a fresh kit. Trigger on first session automatically if the ## User section in CLAUDE.md still says "User" (the placeholder).
+description: Guided onboarding for second-brain-kit. Configures the user's name, goal, language, and privacy preferences; writes the ## User section to AGENTS.md; installs Python dependencies; runs a test embed. Use when the user says "setup", "brain setup", "configure my brain", "get started", or opens Claude Code in a fresh kit. Trigger on first session automatically if the ## User section in AGENTS.md still says "User" (the placeholder).
 argument-hint: [--skip-install to skip pip install if already done]
 allowed-tools: Read, Write, Edit, Bash
 ---
@@ -15,7 +15,7 @@ Welcome to second-brain-kit. This skill configures your brain in one go.
 
 ## Step 0 — Check for existing configuration
 
-Before doing anything else, read `CLAUDE.md` and check the `## User` section.
+Before doing anything else, read `AGENTS.md` and check the `## User` section.
 
 - If `Name/alias:` is anything other than `User`, the brain is already configured.
 - In that case, say: "Your brain is already configured as [name]. Want to update your settings, or just re-install dependencies?" Then branch accordingly — don't re-run the full setup unless asked.
@@ -47,7 +47,7 @@ Ask all four questions as a single numbered list in plain text. Wait for the use
 
 Apply the answers inline (do not delegate to `setup.py` — that would re-ask all questions):
 
-1. Read `CLAUDE.md` and replace the `## User` section:
+1. Read `AGENTS.md` and replace the `## User` section:
    ```markdown
    ## User
 

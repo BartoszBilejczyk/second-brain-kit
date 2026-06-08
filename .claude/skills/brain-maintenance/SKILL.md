@@ -9,7 +9,7 @@ allowed-tools: Read, Write, Glob, Grep, Edit, Bash
 
 The second brain compounds only if it's pruned. This skill runs the recurring cleanup cycle — the equivalent of sleep consolidation for the brain. It doesn't replace `/brain-ingest` (which adds new material) or `/brain-lint` (deep structural check). It keeps what's already there healthy and actionable.
 
-**Always read `CLAUDE.md` first**, then `log.md` (last 10 entries) to know what's changed since last maintenance.
+**Always read `AGENTS.md` first**, then `log.md` (last 10 entries) to know what's changed since last maintenance.
 
 ---
 

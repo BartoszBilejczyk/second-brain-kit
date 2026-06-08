@@ -9,7 +9,7 @@ allowed-tools: Read, Write, Edit, Glob, Grep
 
 Append a quick thought into the second brain — the low-friction path for ideas that arrive without a recording.
 
-**Always read `CLAUDE.md` first** for page conventions.
+**Always read `AGENTS.md` first** for page conventions.
 
 Thought: `$ARGUMENTS`
 

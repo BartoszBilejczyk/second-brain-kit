@@ -14,9 +14,11 @@ Compact quality audit of a brain-ingest run. The goal is to catch problems early
 ## Setup
 
 Read in this order before reviewing anything:
-1. `CLAUDE.md` — voice profile and page conventions
-2. `hot.md` — what was just ingested and current state
-3. `index.md` — full page inventory
+1. `AGENTS.md` — page conventions and domain context
+2. `voice.md` — voice spine (register, vocabulary, metaphors, anti-voice). Skip if not yet built — run `/brain-voice` to create it.
+3. `wiki/voice-profile/anti-voice.md` — the full drift-tell list with examples. Skip if not yet built.
+4. `hot.md` — what was just ingested and current state
+5. `index.md` — full page inventory
 
 If the user specifies which pages or batch to review, focus there. Otherwise review all pages added or modified in the most recent ingest (visible from `hot.md` "Recently touched pages" or `log.md`).
 
@@ -36,9 +38,35 @@ For each page being reviewed, read it. Also spot-check 1-2 source files (from `r
 - Are any links to pages that clearly should exist but don't (i.e., obvious gaps in the wiki)?
 
 ### 3. Voice fidelity
-- Does the wiki sound like the user — first-person, in their voice, not like a summary written about them?
-- Read `wiki/voice-profile/` pages for their specific style rules: rhythm, phrases they use, things they never say. Check against those.
-- Does the language match the user's preferred language from the `## User` section in `CLAUDE.md`?
+
+You already read `voice.md` and `anti-voice.md` in Setup. Apply them here. If they don't exist yet, use the generic checks below.
+
+**Anti-voice patterns — immediate FAIL if found:**
+- Coach/therapist register: "Not a flaw — a fact to understand", "design your life", "something to work through", "space for growth", "build self-awareness"
+- Invented aphorisms: `X = Y` formulas for personal beliefs (e.g. "Space = freedom of thought"), manufactured staccato punch ("I am ambitious. I fight for myself.")
+- Analyst reframe: "This is the tension between X and Y"
+- Growth-mindset uplift: "every day I become better", "I fall but I get back up"
+- Third-person narration: "they are someone who...", "the user tends to..." (should be first-person throughout)
+
+**If `voice.md` exists:** also check against their specific anti-voice list and vocabulary inventory.
+
+**Register check:**
+- First-person throughout? (Third-person = drift)
+- Signature vocabulary present where relevant? (Check `wiki/voice-profile/vocabulary.md` if it exists)
+- Metaphors preserved when the transcript used them? (Check `wiki/voice-profile/metaphors.md` if it exists)
+
+**Structure check:**
+- Does each page open with the most general statement (the principle/trait), then expand to specifics? Or does it open with a specific date/event?
+- Do all dates include the year? ("March", "autumn" without a year = flag)
+
+**Quote block check:**
+- Is `## Quotes (verbatim)` present on full-voice pages?
+- Are quotes clearly pulled from raw transcripts — not paraphrased, not invented?
+- If the quotes sound more like the user than the body prose: the body drifted — fix the prose, not the quotes.
+
+**Language:**
+- Does the language match the user's preferred language from the `## User` section in `AGENTS.md`?
+- Is the language consistent with what's expected for this page type?
 
 ### 4. Coverage gaps
 - Read the source(s) and identify 2-3 ideas that were significant in the recording but have no wiki page. Note them — they're candidates for the next batch or a follow-up.

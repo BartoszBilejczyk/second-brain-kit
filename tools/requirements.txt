@@ -1,7 +1,5 @@
 # Core AI/ML dependencies
 # First run will download models — see README for size expectations
-#
-# Known-good versions (as of 2026-06): whisper=20250625, sentence-transformers=5.5.1, torch=2.12.0
 
 # Whisper: audio transcription (OpenAI, runs locally)
 openai-whisper>=20250625

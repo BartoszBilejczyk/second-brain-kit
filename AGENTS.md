@@ -1,6 +1,16 @@
 # Second Brain — Agent Constitution
 
-Full guide for AI assistants working in this vault. Claude Code reads `CLAUDE.md` for the user profile and folder rules, then this file for deeper context on wiki structure, skill operations, and daily use patterns.
+Full guide for AI assistants working in this vault. All tools (Claude Code, Codex CLI, Gemini CLI, etc.) read this file for the complete operating rules.
+
+---
+
+## User
+
+Name/alias: (set by /brain-setup)
+Goal: (set by /brain-setup)
+Language: (set by /brain-setup)
+
+*(This section is written by `/brain-setup` during onboarding. Update it any time.)*
 
 ---
 
@@ -15,6 +25,58 @@ The core loop:
 4. You ask questions; the AI traverses the graph to answer in *your* voice
 
 The difference from a notes app: **the AI knows who you are**. It answers from your actual views, stories, and beliefs — not generic training data.
+
+---
+
+## Folder ownership (non-negotiable)
+
+```
+<repo-root>/
+├── CLAUDE.md            # pointer to this file (@AGENTS.md)
+├── AGENTS.md            # this file — full agent constitution
+├── profile.md           # stable identity + current situation (AI maintains)
+├── index.md             # table of contents of every wiki page (AI maintains)
+├── hot.md               # ~500-word recency cache: recent changes, upcoming plans
+├── log.md               # append-only audit trail of every operation
+├── meta/
+│   ├── tensions.md      # open contradictions and unresolved questions
+│   ├── wiki-graph.json  # pre-built link map — rebuilt on every ingest
+│   └── embeddings.json  # semantic vectors (gitignored, rebuilt incrementally)
+├── interview/           # HUMAN-OWNED — questions + recordings
+├── raw/                 # HUMAN-OWNED — inputs Claude reads but NEVER edits
+│   ├── transcripts/     # Whisper output from recordings
+│   └── sources/         # pasted text, web clippings, PDFs, etc.
+└── wiki/                # AI-OWNED — synthesized, cross-linked pages
+    ├── identity/         beliefs/         opinions/
+    ├── work/             money/           relationships/
+    ├── mind/             voice-profile/   people/
+    ├── concepts/         synthesis/       sources/
+```
+
+**Rules:**
+- AI **NEVER edits `raw/` or `interview/`**. Those are human-owned source-of-truth. Read only.
+- AI **only writes** to `wiki/`, `profile.md`, `index.md`, `hot.md`, `log.md`, `meta/`.
+- Every write to `wiki/` gets a one-line entry appended to `log.md`.
+
+**profile.md vs hot.md — the distinction:**
+- `profile.md` = stable identity, settled beliefs, current life situation. Enriched after each ingest, never replaced.
+- `hot.md` = operational state: recently touched pages, upcoming plans, what just changed, next actions. Refreshed frequently.
+
+---
+
+## Session start — what to read
+
+**For any second-brain session, read in this order:**
+1. `AGENTS.md` (this file — user profile + all rules)
+2. `voice.md` (voice spine — register, vocabulary, metaphors, anti-voice; run `/brain-voice` to build it if missing)
+3. `profile.md` (who the user is + current situation)
+4. `hot.md` (operational state)
+
+**Before brain-ingest:** also read `index.md`, `meta/tensions.md`, and `wiki/voice-profile/spoken-to-written.md` (if it exists).
+
+**Before brain-query:** Run `python tools/embed-wiki.py --query "..." --top 5 --json` first to identify seed pages semantically. Do not manually scan index.md to guess which pages are relevant.
+
+**Before brain-review:** also read `index.md` and the specific pages just created.
 
 ---
 
@@ -36,6 +98,40 @@ All wiki pages live in `wiki/` and are written by the AI (brain-ingest) or occas
 | `concepts/` | Abstract ideas you return to repeatedly | Your personal definition of freedom, what "success" means to you |
 | `synthesis/` | Cross-domain insights from brain-query (2+ hops) | "My anti-conformism is connected to my country's cultural pessimism" |
 | `sources/` | One page per external source ingested (YouTube, article, book) | What it was, which wiki pages it created, why it mattered |
+
+---
+
+## Page conventions
+
+Every wiki page is a markdown file with frontmatter:
+
+```yaml
+---
+title: <Human readable title>
+type: identity | belief | opinion | work | venture | money | relationship | mind | voice | person | concept | synthesis | source
+created: YYYY-MM-DD
+updated: YYYY-MM-DD
+sources: [raw/transcripts/session-01.md]
+confidence: high | medium | low
+lang: en | pl | mixed | <your language code>
+---
+```
+
+- **One idea per page.** A page is a belief, a story, a person, a concept — not a dump.
+- **Title is the link target.** Pages reference each other with `[[Title]]`. Link liberally.
+- **Distill the structure, keep the voice.** Pages are one-idea distillations written in the user's words, phrasing, and register — not paraphrased into clean prose or a different tone. Filler and rambling removed; vocabulary, metaphors, and patterns preserved. Rule: compress repetition, never re-register. Full spec: `wiki/voice-profile/spoken-to-written.md`.
+- **No invented statements.** Every sentence must trace to what the user actually said. Pattern-finding and synthesis are fine — but conclusions must not be stated as their words if they aren't. When in doubt: use a verbatim quote from the transcript.
+- **Cite the source** in frontmatter so every claim is traceable back to a recording/transcript.
+
+**Inline-first linking:** Every paragraph that references an existing wiki concept must contain a `[[wikilink]]` inline at the point of reference — not saved for the bottom `_Related:_` section. The reader (and brain-query) needs to know *which sentence* motivated the connection.
+
+**Related section:** Use `_Related:_` at the bottom of each page to list all outbound links — including ones that didn't fit inline. It supplements inline linking; it doesn't replace it.
+
+**Synthesis pages** (`wiki/synthesis/`) are created by brain-query when it surfaces a non-obvious cross-domain connection (2+ hops). Their `sources:` field lists wiki pages, not raw/.
+
+**Source pages** (`wiki/sources/`) are created during brain-ingest for every external source (YouTube, article, podcast). Short: what the source is, which wiki pages it created/enriched, why it mattered.
+
+**log.md format:** Each entry uses `## [YYYY-MM-DD] operation | title` so entries are grep-parseable.
 
 ### What a good wiki page looks like
 
@@ -71,7 +167,22 @@ Key elements:
 
 ---
 
+## Interaction conventions
+
+**For short structured choices** (yes/no, pick one from a small list): use `AskUserQuestion`.
+
+**For open-ended or multi-part input** (free-form context, setup questions where the user needs to think and type): ask as plain text. A numbered list works well when collecting several answers at once. Wait for the user's full reply before proceeding.
+
+---
+
 ## Skill descriptions — what each skill does and when to invoke it
+
+### `/brain-voice`
+Build or update the voice profile from existing transcripts. Run once after your first ingest; re-run whenever you add significant new material.
+
+**Input:** files in `raw/transcripts/` and `raw/sources/`
+**Output:** `voice.md` (spine) + `wiki/voice-profile/` depth pages (vocabulary, metaphors, register, anti-voice, spoken-to-written)
+**When to trigger:** "build my voice profile", "update voice", "create voice.md", after first ingest if voice.md doesn't exist
 
 ### `/brain-ingest`
 Turn new raw material into wiki pages. Invoke when you've added recordings, transcripts, or source files.
@@ -125,7 +236,7 @@ System meta-audit — skill quality, patterns, improvement proposals.
 **When to trigger:** "retrospective", "how did the session go", "what should we fix in the skills"
 
 ### `/brain-setup`
-One-time guided onboarding. Writes the `## User` section in CLAUDE.md.
+One-time guided onboarding. Writes the `## User` section in AGENTS.md.
 
 **When to trigger:** first time setup, or "run brain setup again"
 
@@ -144,6 +255,8 @@ You speak → recording in interview/recordings/ or raw/
          → /brain-ingest → wiki/ pages created/updated
                          → index.md, hot.md, log.md, profile.md updated
                          → wiki-graph.json + embeddings.json rebuilt
+         → /brain-voice (first time, or after major new material)
+                         → voice.md + wiki/voice-profile/ pages built/updated
          → /brain-query → answers grounded in the wiki, in your voice
          → /brain-review (optional, after ingest) → quality check
          → /brain-lint (periodic) → structural health
@@ -184,15 +297,61 @@ You have coaching sessions, performance reviews, or career reflections you want 
 
 ---
 
-## Health principles
+## Voice profile
+
+The canonical voice asset is `voice.md` (repo root) — read it at every session start (see Session start above). Build it by running `/brain-voice` after your first ingest. It holds: register description, vocabulary quick-reference (keep / remove), key metaphors, anti-voice drift tells, and the spoken→written conversion rule.
+
+Depth pages in `wiki/voice-profile/` provide the full detail:
+- `vocabulary.md` — complete signature phrases and filler removal list
+- `metaphors.md` — mined metaphor bank with source citations
+- `register.md` — language mix, tone, what they never say
+- `anti-voice.md` — drift tells: coach-prose, invented aphorisms, third-person narration
+- `spoken-to-written.md` — conversion spec, filler list, structure rule (general→specific), self-check, quote block format
+- `written-voice.md` — written/published register (LinkedIn, email, essays) if built from published sources
+
+**For any "write as me" or wiki-synthesis output:** read `voice.md` first, then pull relevant depth pages. Never guess the register from training data when the assets are right there.
+
+---
+
+## System health principles
 
 **A brain that isn't pruned rots.** Quality > quantity.
 
-- One idea per page — pages that cover multiple ideas become unmaintainable
-- Inline links are the traversal layer — if a sentence mentions a concept, link it there
-- Every ingest should leave the graph denser, not just bigger
-- Stale pages are fine if they hold settled beliefs; stale pages about "current situation" are not
-- `brain-lint` surfaces problems; `brain-retrospective` finds their root cause; fixing the skill prevents recurrence
+### Reliability
+- A `[[link]]` must always resolve. Broken link = silent data loss for brain-query.
+- **Renames always use `tools/wiki-rename.py`** — never manual find-and-replace.
+- Structural checks run via `brain-lint` after every non-trivial ingest.
+
+### Efficiency
+- Don't read 75+ files to answer a structural or semantic question. Use pre-computed tooling:
+  - **Structural checks** → `python tools/wiki-check.py`
+  - **Navigation map** → `meta/wiki-graph.json` (rebuilt after each ingest via `python tools/build-graph.py`)
+  - **Semantic search** → `python tools/embed-wiki.py --query "..." --top N`
+- Read only what's needed: frontmatter + `_Related:_` lines for structure; full pages for content reasoning.
+
+### Maintainability
+- When a skill rule is added, the backlog of existing pages not meeting the standard is expected. Surface via brain-lint, address incrementally.
+- Every skill change should ask: "what does this break in the existing wiki?"
+
+### Consistency
+- The same standard applies every run.
+- `brain-lint` is the truth-teller. `brain-retrospective` closes the loop.
+
+### Scalability
+- One idea per page is the scalability invariant.
+- The link graph is the index. Don't rely on folder structure for navigation.
+- At ~150 pages, revisit embedding tuning: consider increasing `--top` in brain-query.
+
+### Voice fidelity
+- Every wiki page must pass the "would they read this and say 'yes, that's me'?" test. If not, it is a drift bug — fix the page, not the standard.
+- `brain-review` detects voice drift after every ingest: coach-prose, invented aphorisms, dropped metaphors, re-registered vocabulary. Run it every time.
+- `python tools/wiki-check.py` section 7 (VOICE_SMELLS) surfaces structural drift patterns as WARNings — check it as part of `brain-lint`.
+- A quote block that sounds more like the user than the surrounding prose is a drift signal: the prose drifted, not the quotes.
+- Cross-session drift is anchored by `voice.md`. Every rewrite session must also read the full source transcripts for the relevant cluster — token cost accepted; it is the point.
+
+### No short-term thinking
+- Don't fix a symptom if the root cause is a missing skill rule. Add the rule.
+- Every session should leave the *system* slightly better than it found it.
 
 ---
 
