@@ -177,6 +177,13 @@ Key elements:
 
 ## Skill descriptions — what each skill does and when to invoke it
 
+### `/brain-language`
+Set the primary language for wiki content. Run once if your language is not English — sets the Language field, creates `language.md` with localized conventions (quote block heading), and tells brain-ingest/brain-voice what language to write in. The skill infrastructure (AGENTS.md, skill files, `_Related:_` markers) stays in English.
+
+**Input:** language name (prompted if not provided as argument)
+**Output:** updated `AGENTS.md` Language field + `language.md` config file
+**When to trigger:** "set language to Spanish", "change language", "I want to use this in French"
+
 ### `/brain-voice`
 Build or update the voice profile from existing transcripts. Run once after your first ingest; re-run whenever you add significant new material.
 
@@ -255,6 +262,8 @@ You speak → recording in interview/recordings/ or raw/
          → /brain-ingest → wiki/ pages created/updated
                          → index.md, hot.md, log.md, profile.md updated
                          → wiki-graph.json + embeddings.json rebuilt
+         → /brain-language (once, if not English)
+                         → language.md config + AGENTS.md Language field updated
          → /brain-voice (first time, or after major new material)
                          → voice.md + wiki/voice-profile/ pages built/updated
          → /brain-query → answers grounded in the wiki, in your voice
@@ -345,7 +354,7 @@ Depth pages in `wiki/voice-profile/` provide the full detail:
 ### Voice fidelity
 - Every wiki page must pass the "would they read this and say 'yes, that's me'?" test. If not, it is a drift bug — fix the page, not the standard.
 - `brain-review` detects voice drift after every ingest: coach-prose, invented aphorisms, dropped metaphors, re-registered vocabulary. Run it every time.
-- `python tools/wiki-check.py` section 7 (VOICE_SMELLS) surfaces structural drift patterns as WARNings — check it as part of `brain-lint`.
+- `python tools/wiki-check.py` section 7 (VOICE_DRIFT) surfaces structural drift patterns as WARNings — check it as part of `brain-lint`.
 - A quote block that sounds more like the user than the surrounding prose is a drift signal: the prose drifted, not the quotes.
 - Cross-session drift is anchored by `voice.md`. Every rewrite session must also read the full source transcripts for the relevant cluster — token cost accepted; it is the point.
 

@@ -13,6 +13,7 @@ Turn new human-owned raw material into clean, cross-linked `wiki/` pages in the 
 1. `AGENTS.md` — the constitution: folder ownership, page conventions, the user's domain context
 2. `voice.md` — voice spine: register, vocabulary, metaphors, anti-voice, conversion rule. **If voice.md doesn't exist yet:** note this after orientation and suggest running `/brain-voice` after this ingest to build it from the transcripts.
 3. `wiki/voice-profile/spoken-to-written.md` — full conversion spec: structure rule (general→specific), filler list, quote block format, self-check. Skip if not yet created.
+4. `language.md` — localized conventions (quote block heading, language code). If it exists, use its `quote_heading` value for the verbatim quotes section instead of the English default. If it doesn't exist, use `## Quotes (verbatim)`.
 
 Everything below assumes these rules (especially: never edit `raw/` or `interview/`; only write to `wiki/`, `profile.md`, `index.md`, `hot.md`, `log.md`).
 

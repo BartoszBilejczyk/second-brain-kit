@@ -176,43 +176,30 @@ def check_inline_density(pages: dict, since: str) -> list[dict]:
     return sorted(low_density, key=lambda x: (x["inline_link_count"], x["title"]))
 
 
-def check_voice_smells(pages: dict) -> list[dict]:
-    """Scan page bodies for generic structural drift patterns.
+def check_voice_drift(pages: dict) -> list[dict]:
+    """Scan page bodies for language-agnostic structural drift patterns.
 
-    These patterns are language-agnostic signals that the AI re-registered the
-    user's words into a different voice (coach-prose, analyst framing, invented
-    aphorisms). They fire regardless of whether voice.md has been built yet.
+    Checks structural signals that indicate the AI re-registered the user's
+    words — independent of which language the wiki is written in:
+    - "X = Y" aphorism formulas (invented personal-belief aphorisms)
+    - Third-person narration about the user (coaching-source or summary drift)
 
-    Add user-specific phrases to DRIFT_PATTERNS after running /brain-voice.
+    English-specific phrase lists are intentionally excluded here — they would
+    produce false positives for non-English wikis. Voice fidelity for specific
+    phrases is handled by brain-review reading voice.md and anti-voice.md.
     """
-    # Generic English drift patterns — universal regardless of user language
-    DRIFT_PATTERNS = [
-        r"\bnot a flaw\b",
-        r"\ba fact to understand\b",
-        r"\bsomething to work through\b",
-        r"\bspace for growth\b",
-        r"\bdesign your life\b",
-        r"\bbuild self[-\s]awareness\b",
-        r"\bevery day I become better\b",
-        r"\bI fall but I get back up\b",
-        r"\bthis is the tension between\b",
-        r"\bthe tension between \w+ and \w+\b",
-    ]
-
     # "X = Y" aphorism formula used for personal beliefs (e.g. "Space = freedom of thought")
     APHORISM_RE = re.compile(r"\b[A-Z][a-z]+ = [A-Z][a-z]+", re.MULTILINE)
 
     # Third-person narration about the user in a personal page body
-    # (source drift from externally-narrated transcripts: "they tend to", "the user is someone who")
+    # (drift from externally-narrated transcripts: coach, therapist, interviewer)
     THIRD_PERSON_RE = re.compile(
         r"\b(they tend to|they are someone who|the user (is|tends|believes|feels)|"
         r"[A-Z][a-z]+ (believes|tends to|is someone who|feels that))\b",
         re.IGNORECASE,
     )
 
-    compiled_drift = [re.compile(p, re.IGNORECASE) for p in DRIFT_PATTERNS]
-
-    smells = []
+    drift = []
     for title, data in pages.items():
         if data.get("type") == "source":
             continue  # source pages don't carry personal voice
@@ -224,22 +211,19 @@ def check_voice_smells(pages: dict) -> list[dict]:
             continue
 
         found = []
-        for pattern in compiled_drift:
-            if pattern.search(main_body):
-                found.append(pattern.pattern)
         if APHORISM_RE.search(main_body):
             found.append("X = Y aphorism formula")
         if THIRD_PERSON_RE.search(main_body):
             found.append("third-person narration about self")
 
         if found:
-            smells.append({
+            drift.append({
                 "title": title,
                 "file": data["file"],
                 "patterns": found,
             })
 
-    return sorted(smells, key=lambda x: x["title"])
+    return sorted(drift, key=lambda x: x["title"])
 
 
 def check_frontmatter_gaps(pages: dict) -> list[dict]:
@@ -270,7 +254,7 @@ def print_report(results: dict):
         + len(inline_errors)
         + len(results["frontmatter_gaps"])
     )
-    total_warnings = len(inline_warns) + len(results["voice_smells"])
+    total_warnings = len(inline_warns) + len(results["voice_drift"])
 
     today = date.today().isoformat()
     print(f"# wiki-check report — {today}")
@@ -347,9 +331,9 @@ def print_report(results: dict):
         print("  (none)")
     print()
 
-    print("## 7. VOICE_SMELLS  [WARN] (structural drift patterns — re-register / coach-prose / aphorism)")
-    if results["voice_smells"]:
-        for item in results["voice_smells"]:
+    print("## 7. VOICE_DRIFT  [WARN] (structural drift patterns — re-register / aphorism / third-person)")
+    if results["voice_drift"]:
+        for item in results["voice_drift"]:
             patterns = ", ".join(item["patterns"])
             print(f"  {item['title']}  ({patterns})")
     else:
@@ -381,7 +365,7 @@ def main():
         "thin_links": check_thin_links(pages),
         "low_inline_density": check_inline_density(pages, since=args.since),
         "frontmatter_gaps": check_frontmatter_gaps(pages),
-        "voice_smells": check_voice_smells(pages),
+        "voice_drift": check_voice_drift(pages),
     }
 
     if args.json:

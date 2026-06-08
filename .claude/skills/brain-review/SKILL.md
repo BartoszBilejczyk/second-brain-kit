@@ -42,11 +42,9 @@ For each page being reviewed, read it. Also spot-check 1-2 source files (from `r
 You already read `voice.md` and `anti-voice.md` in Setup. Apply them here. If they don't exist yet, use the generic checks below.
 
 **Anti-voice patterns — immediate FAIL if found:**
-- Coach/therapist register: "Not a flaw — a fact to understand", "design your life", "something to work through", "space for growth", "build self-awareness"
-- Invented aphorisms: `X = Y` formulas for personal beliefs (e.g. "Space = freedom of thought"), manufactured staccato punch ("I am ambitious. I fight for myself.")
-- Analyst reframe: "This is the tension between X and Y"
-- Growth-mindset uplift: "every day I become better", "I fall but I get back up"
-- Third-person narration: "they are someone who...", "the user tends to..." (should be first-person throughout)
+- Invented aphorisms: `X = Y` formulas for personal beliefs (e.g. "Space = freedom of thought") — the wiki-check VOICE_DRIFT check catches these automatically
+- Third-person narration: "they are someone who...", "the user tends to..." — caught by VOICE_DRIFT; should be first-person throughout
+- If `anti-voice.md` exists: check against the user's own list of drift tells (coach phrases, growth-mindset clichés, analyst reframes in their language)
 
 **If `voice.md` exists:** also check against their specific anti-voice list and vocabulary inventory.
 
