@@ -58,9 +58,26 @@ Apply the answers inline (do not delegate to `setup.py` — that would re-ask al
    *(This section is written by `/brain-setup` during onboarding. Update it any time.)*
    ```
 
-2. Write `profile.md` with a starter template — name, goal, today's date, empty section stubs.
+2. **If language is not English:** create `language.md` at the repo root with the localized quote block heading. Derive the heading for the chosen language (e.g. Spanish → `## Citas (literal)`, French → `## Citations (verbatim)`, German → `## Zitate (wörtlich)`, Polish → `## Cytaty (dosłownie)`). Format:
+   ```markdown
+   ---
+   language: {language}
+   language_code: {ISO 639-1 code}
+   quote_heading: "{localized heading}"
+   updated: {today}
+   ---
 
-3. Update `.gitignore`:
+   # Language Config
+
+   Primary language for this second brain: **{language}**
+
+   Quote block heading for wiki pages: `{localized heading}`
+   ```
+   If language is English, skip this step — English is the default and no config file is needed.
+
+3. Write `profile.md` with a starter template — name, goal, today's date, empty section stubs.
+
+4. Update `.gitignore`:
    - If recordings should be excluded: uncomment or add `interview/recordings/`
    - If committed: leave as-is and note it
 
