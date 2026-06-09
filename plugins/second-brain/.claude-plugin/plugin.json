@@ -1,18 +1,5 @@
 {
   "name": "second-brain",
   "version": "1.0.0",
-  "description": "Personal second brain skills — ingest, query, voice, lint, and maintenance for a markdown wiki vault.",
-  "skills": [
-    "brain-ingest",
-    "brain-language",
-    "brain-lint",
-    "brain-log",
-    "brain-maintenance",
-    "brain-query",
-    "brain-retrospective",
-    "brain-review",
-    "brain-setup",
-    "brain-transcribe",
-    "brain-voice"
-  ]
+  "description": "Personal second brain skills — ingest, query, voice, lint, and maintenance for a markdown wiki vault."
 }
