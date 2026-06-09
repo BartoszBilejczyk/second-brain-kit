@@ -4,7 +4,7 @@
     {
       "name": "second-brain",
       "description": "Personal second brain skills — ingest, query, voice, lint, and maintenance for a markdown wiki vault.",
-      "path": "plugins/shared/second-brain"
+      "path": "plugins/second-brain"
     }
   ]
 }
