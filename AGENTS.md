@@ -384,4 +384,19 @@ python tools/embed-wiki.py           # incremental re-embed (only changed pages,
 
 ## Multi-agent skill discovery
 
-Skills are in `.claude/skills/<name>/SKILL.md` (Claude Code) and mirrored via symlinks at `.agents/skills/<name>/` (Codex CLI, Gemini CLI). Both paths point to the same SKILL.md files — one source of truth.
+Skills live in `plugins/shared/second-brain/skills/<name>/SKILL.md` — the single source of truth. The plugin is registered in `.claude-plugin/marketplace.json` at the repo root, which Claude Code auto-discovers when you open this repo.
+
+To use these skills in another repo, add this to that repo's `.claude/settings.local.json`:
+
+```json
+"extraKnownMarketplaces": {
+  "second-brain-kit": {
+    "source": {
+      "source": "directory",
+      "path": "/absolute/path/to/second-brain-kit"
+    }
+  }
+}
+```
+
+Then install the plugin: `/plugin install second-brain@second-brain-kit`
