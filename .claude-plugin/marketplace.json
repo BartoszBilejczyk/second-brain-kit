@@ -1,5 +1,8 @@
 {
   "name": "second-brain-kit",
+  "owner": {
+    "name": "bartoszbilejczyk"
+  },
   "plugins": [
     {
       "name": "second-brain",
