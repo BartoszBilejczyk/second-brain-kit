@@ -1,6 +1,6 @@
 ---
 name: brain-maintenance
-description: Runs a scheduled health check on the user's second brain wiki. Invoke when the user says "maintain the brain", "run brain maintenance", "clean up the wiki", or on a scheduled basis. Checks for stale pages, weakly-linked content, resolved tensions, and outdated profile/hot.md. Outputs a prioritized action list and applies safe fixes automatically. Use this for recurring upkeep — it's the brain's sleep cycle equivalent.
+description: Runs a scheduled health check on the user's second brain wiki. Invoke when the user says "maintain the brain", "run brain maintenance", "clean up the wiki", or on a scheduled basis. Checks for stale pages, weakly-linked content, resolved tensions, and outdated profile/hot-personal.md/hot-system.md. Outputs a prioritized action list and applies safe fixes automatically. Use this for recurring upkeep — it's the brain's sleep cycle equivalent.
 argument-hint: [--level daily|weekly|monthly (default: weekly)]
 allowed-tools: Read, Write, Glob, Grep, Edit, Bash
 ---
@@ -20,7 +20,7 @@ Run the appropriate level based on `$ARGUMENTS` or time since last maintenance (
 ### Daily (< 2 min)
 Triggered when: last entry in log.md was today or yesterday.
 
-1. Read `hot.md` — is it still accurate? Update current situation if something shifted (new job, new project milestone, change in plans).
+1. Read `hot-personal.md` and `hot-system.md` — are they still accurate? Update `hot-personal.md` if the user's situation has shifted (new job, milestone reached, emotional arc changed). Update `hot-system.md` with the current date and maintenance status.
 2. Check `profile.md` "current situation" — if it references something that's now past (e.g., "leaving job mid-July" after July), update it.
 3. Done. Log: `## [date] maintenance | daily check`.
 
@@ -31,7 +31,7 @@ Triggered when: last maintenance entry in log.md was 5–10 days ago.
    - Grep all `[[links]]` in wiki/, check each against page titles. Report mismatches.
    - Find pages with 0 inbound links from other wiki pages (not just index.md). Flag as candidates.
 2. Check `meta/tensions.md` — are any marked tensions now resolved? If the user's situation has changed in a way that answers a tension (e.g., a decision was made, a situation resolved), note it and draft an answer under `_Answer:_` in the tension entry.
-3. Update `hot.md` with any notable changes since last update.
+3. Update `hot-personal.md` if personal state has changed. Update `hot-system.md` with maintenance date and any structural changes.
 4. Log: `## [date] maintenance | weekly`.
 
 ### Monthly (15–20 min)
@@ -62,7 +62,7 @@ All weekly checks, plus:
 **Auto-fix (safe, do immediately):**
 - Broken link where the target page exists but the title doesn't match exactly (e.g., `[[Czas liminalny]]` → page title is `Czas liminalny - między jednym a drugim`): fix the title to match the short form used in links, not the other way around. Short = easier to link.
 - `updated` date in frontmatter older than the actual last edit (when you can verify from log.md).
-- `hot.md` references to events/pages that no longer exist.
+- `hot-personal.md` or `hot-system.md` references to events/pages that no longer exist.
 
 **Flag only (require explicit user confirmation before changing):**
 - Deleting any page (even if stale).
@@ -85,7 +85,7 @@ A page is **evergreen** (fine to not touch) when:
 - It's heavily linked from other pages
 - It has no time-sensitive "current situation" language
 
-Note: `profile.md` and `hot.md` are NOT wiki pages — they decay fastest and need review every 2-4 weeks regardless of links.
+Note: `profile.md`, `hot-personal.md`, and `hot-system.md` are NOT wiki pages — they decay fastest and need review every 2-4 weeks regardless of links.
 
 ---
 

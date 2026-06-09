@@ -23,7 +23,7 @@ Request: `$ARGUMENTS`
    ```bash
    python tools/embed-wiki.py --query "<the query or topic>" --top 5 --json
    ```
-   This returns the 5 most semantically relevant pages in JSON with title, file path, and similarity score. These are your seeds — no need to manually read `index.md` to guess. Read `hot.md` only if the query is about current state/recent events.
+   This returns the 5 most semantically relevant pages in JSON with title, file path, and similarity score. These are your seeds — no need to manually read `index.md` to guess. Read `hot-personal.md` if the query is about the user's current life/emotional state. Read `hot-system.md` if the query is about recent wiki changes or what was ingested.
 
 2. **Traverse the link graph from each seed.** Run the traversal script for the top 2-3 seeds:
    ```bash

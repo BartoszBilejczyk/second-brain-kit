@@ -15,11 +15,11 @@ Turn new human-owned raw material into clean, cross-linked `wiki/` pages in the 
 3. `wiki/voice-profile/spoken-to-written.md` — full conversion spec: structure rule (general→specific), filler list, quote block format, self-check. Skip if not yet created.
 4. `language.md` — localized conventions (quote block heading, language code). If it exists, use its `quote_heading` value for the verbatim quotes section instead of the English default. If it doesn't exist, use `## Quotes (verbatim)`.
 
-Everything below assumes these rules (especially: never edit `raw/` or `interview/`; only write to `wiki/`, `profile.md`, `index.md`, `hot.md`, `log.md`).
+Everything below assumes these rules (especially: never edit `raw/` or `interview/`; only write to `wiki/`, `profile.md`, `index.md`, `hot-personal.md`, `hot-system.md`, `log.md`).
 
 ## Steps
 
-1. **Orient.** Read `profile.md` (who the user is + current situation), then `hot.md` (operational state), then `index.md` (existing pages) and `meta/tensions.md` (open questions). Build on what's there — don't duplicate.
+1. **Orient.** Read `profile.md` (who the user is + current situation), then `hot-personal.md` (current human state) and `hot-system.md` (wiki state), then `index.md` (existing pages) and `meta/tensions.md` (open questions). Build on what's there — don't duplicate.
 2. **Surface state before proceeding.** After reading the spine files, briefly tell the user: what batches/pages already exist, which wiki sections are populated vs empty, any open tensions worth carrying into this batch. This gives them a chance to course-correct before new pages get written. Keep it to 5–8 lines — signal only, no padding.
 3. **Find new material.** Look in `raw/` and `interview/recordings/`. If `$ARGUMENTS` names a specific file or folder, ingest only that; otherwise process everything not yet reflected in the wiki/log.
 4. **Transcribe audio if needed.** For any `.m4a` without a matching transcript, prefer running `/brain-transcribe` first — it handles model selection and UX. Alternatively, run directly: `python tools/transcribe_audio.py <file> --language <lang> --output raw/transcripts/<stem>.md`. The raw transcript is a source — never hand-edit it afterwards.
@@ -64,7 +64,7 @@ Everything below assumes these rules (especially: never edit `raw/` or `intervie
 
    The `_Related:_` section at the bottom of each page is a *complete-list supplement* — it lists every outbound link, including ones that didn't fit naturally inline. It does not substitute for inline linking; it follows it.
 7. **Respect tension.** If a source contradicts an existing page, do not silently overwrite. Note the tension on the page and surface it in your report — contradictions are signal, not error.
-8. **Update the spine.** Add new pages to `index.md` under their section, refresh `hot.md` (~500 words: current state, recently touched pages, anything notable), append a one-line entry per source to `log.md`, and enrich `profile.md` with anything new about the user's identity, situation, or beliefs that emerged from this batch. Profile.md is enriched, never replaced — add and refine, don't rewrite.
+8. **Update the spine.** Add new pages to `index.md` under their section. Update `hot-system.md`: page count, last ingest date, recently changed pages, next recommended actions. Update `hot-personal.md` only if the material revealed a meaningful shift in the user's current state, emotional register, or active tensions — don't rewrite it on every ingest, only when something actually changed. Append a one-line entry per source to `log.md`. Enrich `profile.md` with anything new about the user's identity, situation, or beliefs — enriched, never replaced.
 9. **Language check.** Before reporting back, proofread every page written in this session for the user's primary language (set in `AGENTS.md` → `## User` → Language): spelling, grammar, punctuation, word meaning. AI is not a native speaker in most languages — this step is mandatory, not optional. Fix issues directly in the files.
 10. **Report back.** List pages created/updated, notable new cross-links, contradictions found, and any gap where a follow-up question or recording would meaningfully enrich the brain. If `voice.md` didn't exist at the start of this session, remind the user to run `/brain-voice` to build their voice profile from the material just ingested.
 

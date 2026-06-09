@@ -15,10 +15,10 @@ Thought: `$ARGUMENTS`
 
 ## Steps
 
-1. **Place it.** Read `index.md`/`hot.md` and decide whether this extends an existing `wiki/` page or warrants a new one. Prefer extending when it genuinely belongs together.
+1. **Place it.** Read `index.md`/`hot-system.md` and decide whether this extends an existing `wiki/` page or warrants a new one. Prefer extending when it genuinely belongs together.
 2. **Write it** per the page conventions: frontmatter, one idea per page, in the user's own words. Set `sources: [brain-log <today>]` and an honest `confidence` (quick thoughts are often `low`/`medium`).
 3. **Link it** with `[[Title]]` to related pages so it joins the graph rather than floating alone.
-4. **Update the spine.** Add to `index.md` if new, refresh `hot.md`, append a one-line entry to `log.md`.
+4. **Update the spine.** Add to `index.md` if new, refresh `hot-system.md` (add to recently changed), append a one-line entry to `log.md`.
 5. **Report** what you captured and where.
 
 ## Why it matters

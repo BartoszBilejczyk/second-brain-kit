@@ -17,10 +17,10 @@ Read in this order before reviewing anything:
 1. `AGENTS.md` — page conventions and domain context
 2. `voice.md` — voice spine (register, vocabulary, metaphors, anti-voice). Skip if not yet built — run `/brain-voice` to create it.
 3. `wiki/voice-profile/anti-voice.md` — the full drift-tell list with examples. Skip if not yet built.
-4. `hot.md` — what was just ingested and current state
+4. `hot-system.md` — what was just ingested (recently changed, last ingest date)
 5. `index.md` — full page inventory
 
-If the user specifies which pages or batch to review, focus there. Otherwise review all pages added or modified in the most recent ingest (visible from `hot.md` "Recently touched pages" or `log.md`).
+If the user specifies which pages or batch to review, focus there. Otherwise review all pages added or modified in the most recent ingest (visible from `hot-system.md` "Recently changed" or `log.md`).
 
 For each page being reviewed, read it. Also spot-check 1-2 source files (from `raw/transcripts/` or `raw/sources/`) to compare against what made it into the wiki.
 

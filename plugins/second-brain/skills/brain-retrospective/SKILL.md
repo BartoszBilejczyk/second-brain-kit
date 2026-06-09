@@ -15,7 +15,7 @@ A fast meta-layer audit: not of the wiki content, but of the *process* — the s
 ## What to read
 
 1. `log.md` — last 20 entries (grep `"^## \[" log.md | tail -20`) to understand what was done
-2. `hot.md` — current operational state and what just changed
+2. `hot-system.md` — current wiki operational state and what just changed
 3. Any `meta/brain-lint-report-*.md` files from the current date — these are the ground truth for what failed
 4. The specific skill files that were invoked this session (read their `SKILL.md` to compare intent vs. outcome)
 

@@ -36,7 +36,8 @@ The difference from a notes app: **the AI knows who you are**. It answers from y
 ├── AGENTS.md            # this file — full agent constitution
 ├── profile.md           # stable identity + current situation (AI maintains)
 ├── index.md             # table of contents of every wiki page (AI maintains)
-├── hot.md               # ~500-word recency cache: recent changes, upcoming plans
+├── hot-personal.md      # human state: emotional register, tensions, milestones (AI maintains)
+├── hot-system.md        # wiki state: page count, last ingest, recently changed, next actions (AI maintains)
 ├── log.md               # append-only audit trail of every operation
 ├── meta/
 │   ├── tensions.md      # open contradictions and unresolved questions
@@ -55,12 +56,13 @@ The difference from a notes app: **the AI knows who you are**. It answers from y
 
 **Rules:**
 - AI **NEVER edits `raw/` or `interview/`**. Those are human-owned source-of-truth. Read only.
-- AI **only writes** to `wiki/`, `profile.md`, `index.md`, `hot.md`, `log.md`, `meta/`.
+- AI **only writes** to `wiki/`, `profile.md`, `index.md`, `hot-personal.md`, `hot-system.md`, `log.md`, `meta/`.
 - Every write to `wiki/` gets a one-line entry appended to `log.md`.
 
-**profile.md vs hot.md — the distinction:**
+**profile.md vs hot-personal.md vs hot-system.md — the distinction:**
 - `profile.md` = stable identity, settled beliefs, current life situation. Enriched after each ingest, never replaced.
-- `hot.md` = operational state: recently touched pages, upcoming plans, what just changed, next actions. Refreshed frequently.
+- `hot-personal.md` = human state right now: emotional register, active tensions, upcoming milestones. Refreshed when personal context shifts.
+- `hot-system.md` = wiki operational state: page count, last ingest, recently changed, next actions for brain-ingest. Refreshed after every ingest and maintenance run.
 
 ---
 
@@ -70,7 +72,8 @@ The difference from a notes app: **the AI knows who you are**. It answers from y
 1. `AGENTS.md` (this file — user profile + all rules)
 2. `voice.md` (voice spine — register, vocabulary, metaphors, anti-voice; run `/brain-voice` to build it if missing)
 3. `profile.md` (who the user is + current situation)
-4. `hot.md` (operational state)
+4. `hot-personal.md` (current human state: emotions, tensions, milestones)
+5. `hot-system.md` (wiki operational state: page count, last ingest, next actions)
 
 **Before brain-ingest:** also read `index.md`, `meta/tensions.md`, and `wiki/voice-profile/spoken-to-written.md` (if it exists).
 
@@ -195,7 +198,7 @@ Build or update the voice profile from existing transcripts. Run once after your
 Turn new raw material into wiki pages. Invoke when you've added recordings, transcripts, or source files.
 
 **Input:** files in `raw/` or `interview/recordings/`
-**Output:** new/updated `wiki/` pages, updated `index.md`, `hot.md`, `log.md`, `profile.md`
+**Output:** new/updated `wiki/` pages, updated `index.md`, `hot-personal.md`, `hot-system.md`, `log.md`, `profile.md`
 **When to trigger:** "process my recording", "ingest this", "I have new material", "update the brain"
 **Final step:** always runs `python tools/build-graph.py` and `python tools/embed-wiki.py`
 
@@ -260,7 +263,7 @@ Transcribe audio recordings via Whisper. Supports single files and folders.
 You speak → recording in interview/recordings/ or raw/
          → /brain-transcribe → transcript in raw/transcripts/
          → /brain-ingest → wiki/ pages created/updated
-                         → index.md, hot.md, log.md, profile.md updated
+                         → index.md, hot-personal.md, hot-system.md, log.md, profile.md updated
                          → wiki-graph.json + embeddings.json rebuilt
          → /brain-language (once, if not English)
                          → language.md config + AGENTS.md Language field updated

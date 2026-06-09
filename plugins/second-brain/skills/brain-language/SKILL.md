@@ -14,7 +14,7 @@ Set the language this second brain operates in. The brain's infrastructure (skil
 - Skill instructions (this file and all other SKILL.md files)
 - AGENTS.md constitution and `_Related:_` link markers
 - `wiki-check.py` output and frontmatter field names
-- `index.md`, `log.md`, `hot.md` structural headers
+- `index.md`, `log.md`, `hot-personal.md`, `hot-system.md` structural headers
 
 These are machine-readable artifacts. Changing them would break tooling and make no practical difference — the model handles any content language.
 
