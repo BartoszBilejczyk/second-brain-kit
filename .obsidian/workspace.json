@@ -1,0 +1,208 @@
+{
+  "main": {
+    "id": "e97bce6bb25f0574",
+    "type": "split",
+    "children": [
+      {
+        "id": "9ebc473cd57a3e57",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "2bfebcc271a297b8",
+            "type": "leaf",
+            "state": {
+              "type": "graph",
+              "state": {},
+              "icon": "lucide-git-fork",
+              "title": "Graph view"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "05873a8ef38449d6",
+    "type": "split",
+    "children": [
+      {
+        "id": "3408998ee4dc70a0",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "9d801e283544c06d",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false
+              },
+              "icon": "lucide-folder-closed",
+              "title": "Files"
+            }
+          },
+          {
+            "id": "f6c47d4fcf3bbfd9",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "Search"
+            }
+          },
+          {
+            "id": "ca45453ed6159d0c",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "Bookmarks"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "adfef468929eff9d",
+    "type": "split",
+    "children": [
+      {
+        "id": "f32556d6046097aa",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "229a7b23af06d775",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "Backlinks"
+            }
+          },
+          {
+            "id": "f78a2fe781318a8a",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "Outgoing links"
+            }
+          },
+          {
+            "id": "44e357d7905fdf3f",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "Tags"
+            }
+          },
+          {
+            "id": "10507479f166c0fd",
+            "type": "leaf",
+            "state": {
+              "type": "all-properties",
+              "state": {
+                "sortOrder": "frequency",
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-archive",
+              "title": "All properties"
+            }
+          },
+          {
+            "id": "295e7d6f32fda862",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "Outline"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Open quick switcher": false,
+      "graph:Open graph view": false,
+      "canvas:Create new canvas": false,
+      "daily-notes:Open today's daily note": false,
+      "templates:Insert template": false,
+      "command-palette:Open command palette": false,
+      "bases:Create new base": false
+    }
+  },
+  "active": "2bfebcc271a297b8",
+  "lastOpenFiles": [
+    "wiki/relationships/husky-i-zwiazek.md",
+    "hot.md",
+    "CLAUDE.md",
+    "log.md",
+    "index.md",
+    "README.md",
+    "temp-coaching-ingest-brief.md",
+    "Narodziny Together Games.md",
+    "Otwarty introwertyk.md",
+    "wiki/work/strategia-negocjacyjna.md",
+    "wiki/work/ai-wypalenie-branzy.md",
+    "wiki/work/ai-jako-laboratorium.md",
+    "wiki/together-games/spark-geneza-i-misja.md",
+    "wiki/together-games/solo-founder-strach.md",
+    "wiki/together-games/narodziny-together-games.md",
+    "wiki/sources/walkiewicz-odwaga-rzucic-wszystko.md",
+    "wiki/sources/walkiewicz-konczę-karierę.md",
+    "wiki/sources/walkiewicz-boimy-się-ryzyka.md",
+    "wiki/sources/walkiewicz-ambitni-stoja-w-miejscu.md",
+    "wiki/sources/walkiewicz-353-dziecinstwo-i-sens.md",
+    "wiki/sources/maslowski-561-meskosci-samotnosc.md",
+    "wiki/sources/hormozi-robbins-game-of-life.md",
+    "wiki/identity/intj-architekt.md",
+    "Perfekcjonizm i standardy.md",
+    "Wypalenie i tech lead - błąd roli.md",
+    "wiki/identity/jedynak-i-korzenie.md"
+  ]
+}
