@@ -65,10 +65,17 @@ Everything below assumes these rules (especially: never edit `raw/` or `intervie
    The `_Related:_` section at the bottom of each page is a *complete-list supplement* — it lists every outbound link, including ones that didn't fit naturally inline. It does not substitute for inline linking; it follows it.
 7. **Respect tension.** If a source contradicts an existing page, do not silently overwrite. Note the tension on the page and surface it in your report — contradictions are signal, not error.
 8. **Update the spine.** Add new pages to `index.md` under their section. Update `hot-system.md`: page count, last ingest date, recently changed pages, next recommended actions. Update `hot-personal.md` only if the material revealed a meaningful shift in the user's current state, emotional register, or active tensions — don't rewrite it on every ingest, only when something actually changed. Append a one-line entry per source to `log.md`. Enrich `profile.md` with anything new about the user's identity, situation, or beliefs — enriched, never replaced.
-9. **Language check.** Before reporting back, proofread every page written in this session for the user's primary language (set in `AGENTS.md` → `## User` → Language): spelling, grammar, punctuation, word meaning. AI is not a native speaker in most languages — this step is mandatory, not optional. Fix issues directly in the files.
-10. **Report back.** List pages created/updated, notable new cross-links, contradictions found, and any gap where a follow-up question or recording would meaningfully enrich the brain. If `voice.md` didn't exist at the start of this session, remind the user to run `/brain-voice` to build their voice profile from the material just ingested.
+9. **Tension resolution check — mandatory.** After writing all wiki pages for this batch, read `meta/tensions.md`. For each open tension (those with an empty `_Answer:_` field), check whether the new material provides a direct or partial answer. If it does:
+   - Write the answer under `_Answer:_` in the relevant tension entry
+   - Link to the new wiki page that contains the relevant insight
+   - Mark partial resolutions explicitly: "_Partial answer:_ [explanation] — see [[Page Title]]"
 
-11. **Regenerate navigation artefacts.** After all wiki writes are done, run:
+   This step is non-optional. Tensions are signal — letting them stagnate defeats the purpose of ingesting material that speaks to them.
+
+10. **Language check.** Before reporting back, proofread every page written in this session for the user's primary language (set in `AGENTS.md` → `## User` → Language): spelling, grammar, punctuation, word meaning. AI is not a native speaker in most languages — this step is mandatory, not optional. Fix issues directly in the files.
+11. **Report back.** List pages created/updated, notable new cross-links, contradictions found, tensions resolved or partially answered, and any gap where a follow-up question or recording would meaningfully enrich the brain. If `voice.md` didn't exist at the start of this session, remind the user to run `/brain-voice` to build their voice profile from the material just ingested.
+
+12. **Regenerate navigation artefacts.** After all wiki writes are done, run:
     ```bash
     python tools/build-graph.py          # rebuild wiki-graph.json (navigation layer)
     python tools/embed-wiki.py           # incremental — only re-embeds changed pages

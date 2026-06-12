@@ -37,7 +37,12 @@ Request: `$ARGUMENTS`
 
 5. **If writing content as the user:** pull the relevant `wiki/voice-profile/` pages plus the topical pages, and match their tone profile from the wiki (voice-profile/ pages define style, rhythm, patterns, and what they never say). Output the *finished* piece, not an outline or a list of options.
 
-6. **Save valuable synthesis.** If the query surfaces a non-obvious cross-domain connection (something that required following 2+ hops to find), offer to save it as a `wiki/synthesis/` page. These compound — future queries can build on saved insights rather than rediscovering them. See synthesis page format in the constitution.
+6. **Save valuable synthesis — mandatory check.** After every query that involved traversing 2+ hops to reach an answer, you **must** propose creating a `wiki/synthesis/` page to capture the cross-domain connection. Do not skip this step — synthesis pages are the only way the brain compounds. Ask: "This connection came from following [Page A] → [Page B] → [Page C]. Should I save it as a synthesis page?" If the user agrees, create the page in `wiki/synthesis/` with:
+   - `type: synthesis`
+   - `sources:` listing the wiki pages that contributed (not raw/)
+   - Body: the non-obvious insight in the user's voice, with inline `[[links]]` to each source page
+
+   These compound — future queries can build on saved insights rather than rediscovering them. See synthesis page format in AGENTS.md.
 
 7. **Close honestly.** Note any gap where a recorded answer would make the output meaningfully stronger — that feeds the next `brain-ingest`.
 

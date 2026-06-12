@@ -33,6 +33,19 @@ The 6 checks, in priority order:
 6. **FRONTMATTER_GAPS** — missing required frontmatter fields.
 7. **VOICE_DRIFT** `[WARN]` — structural drift patterns detected in page bodies: `X = Y` aphorism formulas, third-person narration about the user. These are language-agnostic structural signals — investigate with `brain-review` to confirm and fix.
 
+## Step 2b — staleness check on profile.md
+
+After running the checker, separately read `profile.md` and scan for time-sensitive language. Flag any phrase that will be factually wrong in 3–4 weeks as `[STALE]`:
+
+**Staleness patterns to catch:**
+- Relative time: "X weeks out", "coming soon", "next month", "recently", "currently"
+- Near-term specifics: future dates for events that may have passed, specific metrics that change fast (unit counts, revenue numbers), financial runway estimates tied to a specific month
+- Emotional/situational state that belongs in `hot-personal.md` not `profile.md` (e.g. "currently in recovery", "emerging from a transition")
+
+**Output:** list each flagged phrase with its location and a proposed fix (move to `hot-personal.md`, rewrite as a stable historical fact, or delete).
+
+With `--fix`: apply moves and rewrites directly. Always confirm before deleting.
+
 ## Step 3 — output
 
 Group findings by category, most important first. For each finding, state the file and a concrete proposed fix. Apply fixes only with `--fix`.
