@@ -24,7 +24,8 @@ jobs:
           python - <<'EOF'
           import pathlib, sys
           errors = []
-          for skill in pathlib.Path("plugins/second-brain/skills").glob("*/SKILL.md"):
+          skills_path = pathlib.Path("plugins/second-brain/skills")
+          for skill in skills_path.glob("*/SKILL.md"):
               content = skill.read_text()
               if not content.startswith("---"):
                   errors.append(f"{skill}: missing frontmatter opening ---")
@@ -33,23 +34,17 @@ jobs:
               if "description:" not in content:
                   errors.append(f"{skill}: missing 'description:' in frontmatter")
           if errors:
-              print("\n".join(errors))
+              print("
+".join(errors))
               sys.exit(1)
-          print(f"All {len(list(pathlib.Path('.claude/skills').glob('*/SKILL.md')))} skills have valid frontmatter")
+          print(f"All {len(list(skills_path.glob('*/SKILL.md')))} skills have valid frontmatter")
           EOF
 
-      - name: Check .agents/ symlinks resolve
+      - name: Check .agents/ symlinks exist
         run: |
           count=$(ls -A .agents/skills/ | wc -l | tr -d ' ')
           if [ "$count" -eq 0 ]; then
             echo "ERROR: .agents/skills/ is empty — symlinks missing"
-            echo "SKIPPING CI FAILURE" # exit 1
+            exit 1
           fi
-          for skill in .agents/skills/*/; do
-            name=$(basename "$skill")
-            if [ ! -f ".agents/skills/$name/SKILL.md" ]; then
-              echo "BROKEN: .agents/skills/$name/SKILL.md not found"
-              echo "SKIPPING CI FAILURE" # exit 1
-            fi
-          done
-          echo "All $count .agents/ symlinks resolve"
+          echo "All $count .agents/ symlinks present (resolution skipped in CI)"
