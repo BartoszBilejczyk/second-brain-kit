@@ -27,8 +27,16 @@ Universal tools and skills available from `~/ai-toolkit`. Plugins `core@ai-toolk
 
 Claude keeps a cross-repo working memory at `~/claude-memory/` (`short-term.md` + `long-term.md`), via the `memory@ai-toolkit` plugin — session digests and distilled facts spanning all repos. **This is Claude's own working memory, distinct from any second brain this kit builds** (a second brain is the *user*; this memory is *Claude*). Never mix them.
 
-- Recall recent work → `short-term-memory` (filtered to current repo; ask to widen).
-- Save the session → `short-term-memory` (write mode).
+- Recall recent work → `short-term-memory-read` (filtered to current repo; ask to widen).
+- Save the session → `short-term-memory-write`.
 - Distill into durable facts → `memory-consolidate`.
 
 Read is manual (no auto-injection at session start).
+
+---
+
+## Security & Credential Protection
+
+- **STRICT PROHIBITION:** You are strictly forbidden from reading, displaying, or logging the contents of any files that contain secrets, API keys, or credentials (e.g., `.env`, `.pem`, config files with sensitive data).
+- **Tool Usage:** If you need to verify a configuration, do so without reading the file contents. If you cannot verify it safely, ask the user to verify it.
+- **Credential Protection:** Rigorously protect all sensitive information. Failure to do so is a critical violation of project protocols.
