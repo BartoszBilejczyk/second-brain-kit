@@ -10,6 +10,10 @@ Universal tools and skills available from `~/ai-toolkit`. Plugins `core@ai-toolk
 | Tool | Purpose | How to run |
 |------|---------|------------|
 | `~/ai-toolkit/tools/audio-intelligence/transcribe_audio.py` | Transcribe audio (m4a, mp3, wav) using Whisper large-v3 on Apple Silicon GPU | `python ~/ai-toolkit/tools/audio-intelligence/transcribe_audio.py <file> --language pl` |
+<<<<<<< Updated upstream
+=======
+| `~/ai-toolkit/tools/voice-watcher/` | launchd daemon: auto-transcribes Voice Memos from iCloud Drive on arrival. Full pipeline: `setup/iphone-voice-pipeline.md` | See README — daemon, not a script to run manually |
+>>>>>>> Stashed changes
 | `~/ai-toolkit/tools/video-intelligence/` | Analyze YouTube videos via Gemini API | See README in that directory |
 | `~/ai-toolkit/tools/md-to-pdf/convert_md_to_pdf.py` | Convert Markdown to PDF | `python ~/ai-toolkit/tools/md-to-pdf/convert_md_to_pdf.py <file>` |
 | `~/ai-toolkit/tools/mobi-converter/mobi_converter.py` | Convert ebooks to MOBI format | `python ~/ai-toolkit/tools/mobi-converter/mobi_converter.py <file>` |

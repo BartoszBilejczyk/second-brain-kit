@@ -259,6 +259,8 @@ Transcribe audio recordings via Whisper. Supports single files and folders.
 
 ## Operating loop — how material flows
 
+> **Automated iPhone pipeline (Mac + Apple Silicon):** Instead of manually running `/brain-transcribe`, you can record on iPhone and have the Mac transcribe automatically. See `setup/iphone-voice-pipeline.md`.
+
 ```
 You speak → recording in interview/recordings/ or raw/
          → /brain-transcribe → transcript in raw/transcripts/

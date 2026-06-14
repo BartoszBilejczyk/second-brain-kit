@@ -1,6 +1,6 @@
 ---
 name: brain-transcribe
-description: Transcribe voice recordings into text using Whisper (local, offline). Handles single files and folders. Saves transcripts to raw/transcripts/ ready for brain-ingest. Use when the user says "transcribe this recording", "process my audio", "transcribe my session", drops a file path, or says "I have a recording". Trigger aggressively on any audio file reference or recording mention.
+description: Transcribe voice recordings into text using mlx_whisper (GPU-accelerated, Apple Silicon). Handles single files and folders. Saves transcripts to raw/transcripts/YYYY-MM-DD/ ready for brain-ingest. Use when the user says "transcribe this recording", "process my audio", "transcribe my session", drops a file path, or says "I have a recording". Trigger aggressively on any audio file reference or recording mention.
 argument-hint: [path to audio file or folder of recordings]
 allowed-tools: Read, Write, Bash, Glob
 ---
@@ -10,6 +10,8 @@ allowed-tools: Read, Write, Bash, Glob
 Turn voice recordings into clean transcripts, ready for brain-ingest.
 
 **Arguments:** `$ARGUMENTS`
+
+> **Automated pipeline available (Mac + Apple Silicon):** The VoiceWatcher daemon transcribes iPhone recordings automatically on arrival — no manual step needed. See `setup/iphone-voice-pipeline.md`. This skill is for manually transcribing files you already have on disk.
 
 ---
 
@@ -42,61 +44,66 @@ Always ask — don't try to auto-detect:
 Show the options with timing estimates:
 > "How much accuracy do you need?
 >
-> **fast** — tiny model (~75 MB, ~30 sec per 10 min of audio) — good for clear speech
-> **balanced** — small model (~460 MB, ~90 sec per 10 min) — recommended for most recordings
-> **accurate** — medium model (~1.5 GB, ~3–5 min per 10 min) — best for accented speech, noisy audio"
+> **fast** — tiny model (~30 sec per 10 min of audio) — good for clear speech
+> **balanced** — small model (~60 sec per 10 min) — recommended for most recordings
+> **accurate** — large-v3 model (~90 sec per 10 min, GPU) — best quality, default for Apple Silicon"
 
-For batch folders, also show the total time estimate:
-> "You have 3 recordings totaling ~45 minutes. At balanced speed, that's about ~7 minutes of transcription."
-
-Map choices to Whisper models:
-- fast → `tiny`
-- balanced → `small`
-- accurate → `medium`
+Map choices to mlx models:
+- fast → `mlx-community/whisper-tiny-mlx`
+- balanced → `mlx-community/whisper-small-mlx`
+- accurate → `mlx-community/whisper-large-v3-mlx`
 
 ---
 
-## Step 4 — Transcribe
+## Step 4 — Verify mlx_whisper is available
 
-Before transcribing, verify the virtual environment is active:
 ```bash
-python -c "import sys; print('venv active' if sys.prefix != sys.base_prefix else 'NO VENV')"
+mlx_whisper --help > /dev/null 2>&1 && echo "ok" || echo "not found"
 ```
-If the output is `NO VENV`, stop and tell the user to run `source .venv/bin/activate` (Mac/Linux) or `.venv\Scripts\activate` (Windows) in their terminal, then restart Claude Code.
 
-Also verify Whisper is importable:
+If not found:
 ```bash
-python -c "import whisper; print('whisper ok')"
+pip install mlx-whisper
+brew install ffmpeg
 ```
-If this fails, tell the user to run `pip install -r tools/requirements.txt` with the venv active.
+
+---
+
+## Step 5 — Transcribe
+
+Determine today's date for the output folder:
+```bash
+date '+%Y-%m-%d'
+```
+
+Set the output directory to `raw/transcripts/YYYY-MM-DD/` (create if needed):
+```bash
+mkdir -p raw/transcripts/YYYY-MM-DD
+```
 
 **Single file:**
 ```bash
-python tools/transcribe_audio.py "<audio_path>" --model <model> --language <lang> --output "raw/transcripts/<stem>.md"
+mlx_whisper "<audio_path>" \
+  --model <model> \
+  --language <lang> \
+  --output-format txt \
+  --output-dir raw/transcripts/YYYY-MM-DD
 ```
 
-**Folder (batch):**
-Print progress as each file completes:
-> "1/3 done — session-01-identity.md saved"
-> "2/3 done — session-02-work.md saved"
-> "3/3 done — voice-memo-2025-03-15.md saved"
+The output filename will be `<stem-minus-last-extension>.txt` (mlx_whisper strips the last dotted segment via `.with_suffix()`).
 
-All transcripts save to `raw/transcripts/` with `.md` extension.
+**Folder (batch):** Run the command for each file. Print progress as each completes:
+> "1/3 done — session-01-identity.txt saved"
 
 ---
 
-## Step 5 — Confirm and offer ingest
+## Step 6 — Confirm and offer ingest
 
 After completion:
-> "All transcripts saved to raw/transcripts/. Here's what was created:
-> - raw/transcripts/session-01-identity.md
-> - raw/transcripts/session-02-work.md"
+> "Transcripts saved to raw/transcripts/YYYY-MM-DD/. Created:
+> - raw/transcripts/2026-06-14/session-01-identity.txt"
 
 Then ask:
-> "Want to ingest these into your brain now? Once ingested, you'll be able to ask things like:
-> - 'What's my genuine take on why I create content?'
-> - 'Write a post about [topic] in my voice.'
->
-> Say 'yes' to run brain-ingest, or 'not yet' to do it later."
+> "Want to ingest these into your brain now? Say 'yes' to run brain-ingest, or 'not yet' to do it later."
 
-If they say yes — hand off to brain-ingest (or invoke it directly if the skill system supports chaining).
+If yes — invoke brain-ingest.

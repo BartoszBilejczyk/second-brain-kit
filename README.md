@@ -73,6 +73,14 @@ The skill walks you through configuration, installs dependencies, and gets you t
 
 ---
 
+## Optional: automated iPhone → Mac pipeline
+
+On Mac with Apple Silicon, you can skip the manual transcription step entirely. Record a voice memo on iPhone → it syncs to iCloud → your Mac transcribes it automatically while you sleep.
+
+See [`setup/iphone-voice-pipeline.md`](setup/iphone-voice-pipeline.md) for full instructions.
+
+---
+
 ## First-run downloads
 
 Two local tools download models on first use — these run on your machine, not in the cloud:
@@ -93,11 +101,15 @@ Claude itself runs via the cloud (Claude Code API) — your wiki pages are the c
 
 ## Whisper model comparison
 
+Standard (all platforms):
+
 | Model | Size | Speed (10 min audio) | Best for |
 |-------|------|----------------------|----------|
 | tiny | 75 MB | ~30 sec | Clear speech, quick drafts |
 | small | 460 MB | ~90 sec | Most recordings — recommended |
 | medium | 1.5 GB | ~3–5 min | Accented speech, noisy environments |
+
+**Mac with Apple Silicon:** use `mlx_whisper` with `mlx-community/whisper-large-v3-mlx` — GPU-accelerated, faster than `medium` above and more accurate. Used by the automated iPhone pipeline. Install: `pip install mlx_whisper && brew install ffmpeg`.
 
 ---
 
