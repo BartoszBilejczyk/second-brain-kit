@@ -92,24 +92,31 @@ Warn the user about download sizes first:
 > Before installing, here's what will download on first use:
 > - sentence-transformers model: ~420 MB (semantic search, downloaded once)
 > - PyTorch: ~700 MB (required)
-> - Whisper model: 75 MB (fast) to 1.5 GB (accurate), depending on what you choose
+> - mlx-whisper model: 75 MB (fast) to 1.5 GB (accurate), depending on what you choose
 >
 > Total: roughly 1.2–2.6 GB. This happens once and runs offline forever after.
 
 If `$ARGUMENTS` contains `--skip-install`, skip this step.
 
-Run directly:
+Run both installs:
 ```bash
 pip install -r tools/requirements.txt
+pip install -r ~/ai-toolkit/tools/audio-intelligence/requirements.txt
 ```
 
-If it fails with `externally-managed-environment`: tell the user they need a venv because their Python is system-managed. Suggest:
+If either fails with `externally-managed-environment`: tell the user they need a venv because their Python is system-managed. Suggest:
 ```
 python3 -m venv .venv && source .venv/bin/activate
 ```
-Then re-run the install.
+Then re-run both installs.
 
-If it fails for any other reason: show the exact error and suggest checking Python version (`python --version`, need 3.10+).
+Also check FFmpeg is available (required for audio transcription):
+```bash
+ffmpeg -version
+```
+If missing: `brew install ffmpeg`
+
+If any install fails for any other reason: show the exact error and suggest checking Python version (`python --version`, need 3.10+).
 
 ---
 
