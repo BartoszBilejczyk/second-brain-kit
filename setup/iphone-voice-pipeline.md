@@ -21,10 +21,12 @@ No terminal commands after setup. No manual transcription step.
 ```
 iPhone Shortcut → records audio → saves to iCloud Drive/voice-notes/<subfolder>/
 Mac VoiceWatcher daemon detects new file (via launchd WatchPaths)
-  → mlx_whisper transcribes (Polish or your language, GPU-accelerated)
-  → .txt appears next to the audio in iCloud
+  → .m4a copied to <brain-repo>/raw/audio/YYYY-MM-DD/ (retry source if transcript has issues)
+  → mlx_whisper transcribes with --no-speech-threshold 0.85 (prevents hallucination loops)
+  → loop detection: warns in log + sends ⚠️ notification if any line repeats >10 times
+  → sends ✅ notification when transcript is ready, ❌ notification on failure
   → .txt moved to <brain-repo>/raw/transcripts/YYYY-MM-DD/ (date folder created if needed)
-  → .m4a archived to done/ subfolder
+  → .m4a archived to done/ subfolder in iCloud
 When ready → run /brain-ingest to process transcripts from raw/transcripts/
 ```
 
