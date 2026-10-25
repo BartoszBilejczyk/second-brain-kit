@@ -24,7 +24,7 @@ jobs:
           python - <<'EOF'
           import pathlib, sys
           errors = []
-          skills_path = pathlib.Path("plugins/second-brain/skills")
+          skills_path = pathlib.Path(".claude/skills")
           for skill in skills_path.glob("*/SKILL.md"):
               content = skill.read_text()
               if not content.startswith("---"):
@@ -34,8 +34,7 @@ jobs:
               if "description:" not in content:
                   errors.append(f"{skill}: missing 'description:' in frontmatter")
           if errors:
-              print("
-".join(errors))
+              print("\n".join(errors))
               sys.exit(1)
           print(f"All {len(list(skills_path.glob('*/SKILL.md')))} skills have valid frontmatter")
           EOF

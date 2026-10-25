@@ -389,19 +389,6 @@ python tools/embed-wiki.py           # incremental re-embed (only changed pages,
 
 ## Multi-agent skill discovery
 
-Skills live in `plugins/shared/second-brain/skills/<name>/SKILL.md` — the single source of truth. The plugin is registered in `.claude-plugin/marketplace.json` at the repo root, which Claude Code auto-discovers when you open this repo.
+Skills live in `.claude/skills/<name>/SKILL.md` — the single source of truth. `.agents/skills/<name>` symlinks to each one, so non-Claude-Code agents that read `.agents/skills/` see the same skills. Claude Code auto-discovers `.claude/skills/` when you open this repo — no plugin/marketplace registration needed.
 
-To use these skills in another repo, add this to that repo's `.claude/settings.local.json`:
-
-```json
-"extraKnownMarketplaces": {
-  "second-brain-kit": {
-    "source": {
-      "source": "directory",
-      "path": "/absolute/path/to/second-brain-kit"
-    }
-  }
-}
-```
-
-Then install the plugin: `/plugin install second-brain@second-brain-kit`
+To use these skills in another repo, either work directly in this repo, or copy/symlink the specific `.claude/skills/<name>/` directories you need into that repo's own `.claude/skills/`.

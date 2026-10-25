@@ -48,3 +48,11 @@ interview/recordings/
 # Raw personal content — not pushed to public template forks
 raw/transcripts/
 raw/sources/
+
+# Machine-local links to the private ai-toolkit (dead for template users)
+.agents/skills/ai-native
+.agents/skills/check-and-commit
+.agents/skills/clarify
+.agents/skills/meeting-summary
+.agents/skills/polish-speaker
+.agents/skills/youtube-summary
