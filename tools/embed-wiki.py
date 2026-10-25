@@ -12,6 +12,14 @@ Run modes:
   python tools/embed-wiki.py --query "what do I think about risk?"
   python tools/embed-wiki.py --query "..." --top 5
 
+  # brain-sleep Step 2 — paragraph-level duplication inside one page
+  python tools/embed-wiki.py --paragraph-diff wiki/mind/some-page.md
+  python tools/embed-wiki.py --paragraph-diff <file> --threshold 0.85 --json
+
+  # brain-sleep Step 4 — cross-batch pairwise similarity among recently-touched pages
+  python tools/embed-wiki.py --cluster-recent --since 2026-06-04 --top-pairs 5 --json
+  python tools/embed-wiki.py --cluster-recent --pages "Title A,Title B,Title C" --json
+
 The model (paraphrase-multilingual-mpnet-base-v2) is ~420MB and downloads on
 first run to ~/.cache/huggingface/. Subsequent runs are fully offline.
 Works with any language — English, Polish, Spanish, etc.
@@ -40,6 +48,8 @@ WIKI_ROOT = REPO_ROOT / "wiki"
 EMBEDDINGS_PATH = REPO_ROOT / "meta" / "embeddings.json"
 MODEL_NAME = "paraphrase-multilingual-mpnet-base-v2"
 DEFAULT_TOP_K = 8
+DEFAULT_PARAGRAPH_THRESHOLD = 0.80
+DEFAULT_TOP_PAIRS = 5
 
 
 def parse_frontmatter(content: str) -> dict:
@@ -187,15 +197,126 @@ def query(query_text: str, top_k: int = DEFAULT_TOP_K) -> list[dict]:
     return scored[:top_k]
 
 
+def split_paragraphs(body: str) -> list[str]:
+    """Split a page body into paragraphs for within-page duplication detection.
+
+    Never touches the verbatim quotes block (## Quotes (verbatim), or the
+    localized heading from language.md) — matching brain-sleep's hard rule to
+    never merge/paraphrase quotes.
+    """
+    quotes_split = re.split(r"\n##\s*(?:Quotes|Cytaty)\b.*", body, maxsplit=1)
+    prose = quotes_split[0]
+    # Drop the frontmatter H1 and any "_Related:_" trailer
+    prose = re.sub(r"^#\s+.*\n", "", prose.strip())
+    prose = re.sub(r"\n_Related:_.*$", "", prose, flags=re.DOTALL)
+    raw_paragraphs = [p.strip() for p in re.split(r"\n\s*\n", prose) if p.strip()]
+    # Skip bullet-list-only paragraphs and one-liners too short to embed meaningfully
+    return [p for p in raw_paragraphs if len(p) > 40]
+
+
+def paragraph_diff(file_path: str, threshold: float = DEFAULT_PARAGRAPH_THRESHOLD) -> list[dict]:
+    """Find near-duplicate paragraphs within a single page — targets brain-sleep
+    Step 2 reads at the paragraph instead of full-page level."""
+    path = Path(file_path)
+    if not path.is_absolute():
+        path = REPO_ROOT / file_path
+    if not path.exists():
+        print(f"ERROR: file not found: {path}")
+        sys.exit(1)
+
+    content = path.read_text(encoding="utf-8")
+    paragraphs = split_paragraphs(get_body(content))
+    if len(paragraphs) < 2:
+        return []
+
+    model = load_model()
+    vectors = model.encode(paragraphs, show_progress_bar=False)
+
+    pairs = []
+    for i in range(len(paragraphs)):
+        for j in range(i + 1, len(paragraphs)):
+            score = cosine_similarity(vectors[i].tolist(), vectors[j].tolist())
+            if score >= threshold:
+                pairs.append({
+                    "score": round(score, 4),
+                    "paragraph_a_preview": paragraphs[i][:100],
+                    "paragraph_b_preview": paragraphs[j][:100],
+                })
+    pairs.sort(key=lambda x: -x["score"])
+    return pairs
+
+
+def cluster_recent(since: str | None, pages_arg: str | None, top_pairs: int = DEFAULT_TOP_PAIRS) -> list[dict]:
+    """Rank pairwise similarity among a subset of pages (recently touched, or an
+    explicit list) — targets brain-sleep Step 4 so synthesis candidates are
+    ranked before reading, instead of relying on a chronological log skim."""
+    store = load_embeddings()
+    if not store.get("pages"):
+        print("No embeddings found. Run: python tools/embed-wiki.py")
+        sys.exit(1)
+
+    if pages_arg:
+        wanted = {t.strip() for t in pages_arg.split(",")}
+        subset = {t: d for t, d in store["pages"].items() if t in wanted}
+    elif since:
+        subset = {t: d for t, d in store["pages"].items() if d.get("updated", "") >= since}
+    else:
+        print("ERROR: --cluster-recent requires --since or --pages")
+        sys.exit(1)
+
+    titles = list(subset.keys())
+    if len(titles) < 2:
+        return []
+
+    pairs = []
+    for i in range(len(titles)):
+        for j in range(i + 1, len(titles)):
+            a, b = titles[i], titles[j]
+            score = cosine_similarity(subset[a]["vector"], subset[b]["vector"])
+            pairs.append({
+                "score": round(score, 4),
+                "page_a": a,
+                "page_b": b,
+                "type_a": subset[a].get("type", ""),
+                "type_b": subset[b].get("type", ""),
+            })
+    pairs.sort(key=lambda x: -x["score"])
+    return pairs[:top_pairs]
+
+
 def main():
     parser = argparse.ArgumentParser(description="Semantic embeddings for the second-brain wiki.")
     parser.add_argument("--rebuild", action="store_true", help="Force re-embed all pages")
     parser.add_argument("--query", "-q", metavar="TEXT", help="Find most relevant pages for a query")
     parser.add_argument("--top", "-k", type=int, default=DEFAULT_TOP_K, help=f"Number of results (default: {DEFAULT_TOP_K})")
     parser.add_argument("--json", action="store_true", help="Output query results as JSON")
+    parser.add_argument("--paragraph-diff", metavar="FILE", help="Find near-duplicate paragraphs within one page")
+    parser.add_argument("--threshold", type=float, default=DEFAULT_PARAGRAPH_THRESHOLD, help=f"Similarity threshold for --paragraph-diff (default: {DEFAULT_PARAGRAPH_THRESHOLD})")
+    parser.add_argument("--cluster-recent", action="store_true", help="Rank pairwise similarity among recently-touched or listed pages")
+    parser.add_argument("--since", metavar="YYYY-MM-DD", help="With --cluster-recent: only pages with updated >= this date")
+    parser.add_argument("--pages", metavar="TITLE,TITLE,...", help="With --cluster-recent: explicit comma-separated page titles instead of --since")
+    parser.add_argument("--top-pairs", type=int, default=DEFAULT_TOP_PAIRS, help=f"Number of ranked pairs to return (default: {DEFAULT_TOP_PAIRS})")
     args = parser.parse_args()
 
-    if args.query:
+    if args.paragraph_diff:
+        pairs = paragraph_diff(args.paragraph_diff, threshold=args.threshold)
+        if args.json:
+            print(json.dumps(pairs, ensure_ascii=False, indent=2))
+        else:
+            if not pairs:
+                print(f"No paragraph pairs above threshold {args.threshold} — no compression signal found.")
+            for p in pairs:
+                print(f"  [{p['score']:.3f}] \"{p['paragraph_a_preview']}…\"  ~=  \"{p['paragraph_b_preview']}…\"")
+    elif args.cluster_recent:
+        pairs = cluster_recent(args.since, args.pages, top_pairs=args.top_pairs)
+        if args.json:
+            print(json.dumps(pairs, ensure_ascii=False, indent=2))
+        else:
+            if not pairs:
+                print("No pairs found — check --since date or --pages titles against embeddings.json.")
+            for p in pairs:
+                print(f"  [{p['score']:.3f}] {p['page_a']} ({p['type_a']})  <->  {p['page_b']} ({p['type_b']})")
+    elif args.query:
         results = query(args.query, top_k=args.top)
         if args.json:
             print(json.dumps(results, ensure_ascii=False, indent=2))

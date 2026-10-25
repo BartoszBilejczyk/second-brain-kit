@@ -8,7 +8,7 @@
 **T-01** [OPEN] Short description of the tension
 Sources: [[Page A]] vs [[Page B]]
 _Context:_ One sentence explaining why it matters.
-_Answer:_ (filled in by brain-maintenance when resolved)
+_Answer:_ (filled in by brain-consolidate when resolved)
 ```
 
 ---

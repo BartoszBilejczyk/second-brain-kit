@@ -21,7 +21,14 @@ Everything below assumes these rules (especially: never edit `raw/` or `intervie
 
 1. **Orient.** Read `profile.md` (who the user is + current situation), then `hot-personal.md` (current human state) and `hot-system.md` (wiki state), then `index.md` (existing pages) and `meta/tensions.md` (open questions). Build on what's there — don't duplicate.
 2. **Surface state before proceeding.** After reading the spine files, briefly tell the user: what batches/pages already exist, which wiki sections are populated vs empty, any open tensions worth carrying into this batch. This gives them a chance to course-correct before new pages get written. Keep it to 5–8 lines — signal only, no padding.
-3. **Find new material.** Look in `raw/` and `interview/recordings/`. If `$ARGUMENTS` names a specific file or folder, ingest only that; otherwise process everything not yet reflected in the wiki/log.
+3. **Find new material.** Look in `raw/` and `interview/recordings/`. If `$ARGUMENTS` names a specific file or folder, ingest only that.
+
+   **If no specific day or file is named in `$ARGUMENTS`:** do NOT silently process everything. Instead:
+   - Scan `raw/transcripts/` for date folders not reflected in `log.md` (i.e., no log entry for that date)
+   - Also check `interview/recordings/` for any `.m4a` without a matching transcript
+   - Present the pending list to the user and ask which day(s) to ingest, e.g.:
+     > "Pending batches: 2026-06-26 (3 transcripts), 2026-06-27 (1 transcript). Which should I process — all, or a specific day?"
+   - Wait for confirmation before proceeding. If the list is empty, say so and stop.
 4. **Transcribe audio if needed.** For any `.m4a` without a matching transcript, prefer running `/brain-transcribe` first — it handles model selection and UX. Alternatively, run directly: `python tools/transcribe_audio.py <file> --language <lang> --output raw/transcripts/<stem>.md`. The raw transcript is a source — never hand-edit it afterwards.
 5. **Distill the structure, keep the voice.** For each source, distill it into `wiki/` pages following the page conventions in the constitution: one idea per page (a belief, a story, a person, an opinion, a concept), written in the user's own words, phrasing, and register. Full frontmatter (title, type, created/updated, sources, confidence, lang). File into the correct `wiki/` subfolder. Note: `wiki/synthesis/` is reserved for cross-domain insights surfaced by `brain-query` — don't file ingest pages there.
 

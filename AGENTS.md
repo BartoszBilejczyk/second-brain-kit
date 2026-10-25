@@ -231,12 +231,19 @@ Content quality audit after a brain-ingest run.
 **Output:** compact report — synthesis quality, cross-linking, voice fidelity, coverage gaps, tensions
 **When to trigger:** "review the ingest", "check what brain-ingest did", "audit the pages"
 
-### `/brain-maintenance`
-Recurring upkeep — staleness, tensions, profile freshness.
+### `/brain-consolidate`
+Recurring, cheap, structural upkeep — staleness, tensions, profile freshness. Works only from links, frontmatter, and dates; never reads full page bodies.
 
 **Input:** optional `--level daily|weekly|monthly`
-**Output:** maintenance report + auto-fixes applied
-**When to trigger:** "maintain the brain", "run brain maintenance", "clean up the wiki"
+**Output:** consolidation report + auto-fixes applied
+**When to trigger:** "consolidate the brain", "maintain the brain", "run brain consolidation", "clean up the wiki"
+
+### `/brain-sleep`
+Deep, infrequent memory-consolidation pass — compresses pages bloated by repeated ingests, sharpens near-duplicate pages, and proposes synthesis pages. Requires full-content reads, so it's expensive and judgment-heavy; report-only until the user confirms.
+
+**Input:** optional page or folder to focus on
+**Output:** report of compression/pattern-separation/synthesis candidates — nothing written until confirmed
+**When to trigger:** "let the brain sleep on this", "compress the wiki", "run brain sleep", "deep consolidation"
 
 ### `/brain-retrospective`
 System meta-audit — skill quality, patterns, improvement proposals.
@@ -274,6 +281,8 @@ You speak → recording in interview/recordings/ or raw/
          → /brain-query → answers grounded in the wiki, in your voice
          → /brain-review (optional, after ingest) → quality check
          → /brain-lint (periodic) → structural health
+         → /brain-consolidate (daily/weekly/monthly) → cheap structural upkeep
+         → /brain-sleep (infrequent, on-demand) → deep compression + synthesis
          → /brain-retrospective (periodic) → system improvement
 ```
 
@@ -298,7 +307,7 @@ You write notes, reflect on experiences, and want to see patterns across months 
 - Write raw notes in `raw/sources/` or record a voice reflection
 - `/brain-ingest` → synthesized into wiki pages
 - `/brain-query "what patterns do I see in how I handle uncertainty?"` → answer spanning your whole wiki
-- Periodic `/brain-retrospective` or `/brain-maintenance` → catch stale beliefs, surface tensions
+- Periodic `/brain-retrospective` or `/brain-consolidate` → catch stale beliefs, surface tensions
 
 ### 3. Career / coaching
 You have coaching sessions, performance reviews, or career reflections you want to mine for insights.
@@ -307,7 +316,7 @@ You have coaching sessions, performance reviews, or career reflections you want 
 - `/brain-transcribe` your coaching session audio
 - `/brain-ingest` → captures beliefs about work, fears, goals
 - `/brain-query "what are my blind spots around leadership?"` → grounded in actual coaching content
-- `/brain-maintenance --level monthly` → check which career tensions have resolved
+- `/brain-consolidate --level monthly` → check which career tensions have resolved
 
 ---
 

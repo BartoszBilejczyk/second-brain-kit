@@ -1,6 +1,6 @@
 # Hot — System State
 
-*(Refreshed by brain-ingest and brain-maintenance. Wiki operational state: page count, last ingest, recently changed, next actions.)*
+*(Refreshed by brain-ingest and brain-consolidate. Wiki operational state: page count, last ingest, recently changed, next actions.)*
 
 ## Wiki state
 

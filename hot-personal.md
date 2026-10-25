@@ -1,6 +1,6 @@
 # Hot — Personal State
 
-*(Refreshed by brain-ingest and brain-maintenance. Human state: emotional register, current life situation, active tensions, upcoming milestones. Written in the user's voice — what's happening for them right now.)*
+*(Refreshed by brain-ingest and brain-consolidate. Human state: emotional register, current life situation, active tensions, upcoming milestones. Written in the user's voice — what's happening for them right now.)*
 
 ## Current moment
 

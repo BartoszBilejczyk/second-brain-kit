@@ -1,13 +1,13 @@
 ---
-name: brain-maintenance
-description: Runs a scheduled health check on the user's second brain wiki. Invoke when the user says "maintain the brain", "run brain maintenance", "clean up the wiki", or on a scheduled basis. Checks for stale pages, weakly-linked content, resolved tensions, and outdated profile/hot-personal.md/hot-system.md. Outputs a prioritized action list and applies safe fixes automatically. Use this for recurring upkeep — it's the brain's sleep cycle equivalent.
+name: brain-consolidate
+description: Runs a scheduled health check and consolidation cycle on the user's second brain wiki. Invoke when the user says "consolidate the brain", "maintain the brain", "run brain consolidation", "clean up the wiki", or on a scheduled basis. Checks for stale pages, weakly-linked content, resolved tensions, and outdated profile/hot-personal.md/hot-system.md. Outputs a prioritized action list and applies safe fixes automatically. Use this for recurring, cheap, link/frontmatter-level upkeep — the nightly cycle. For deep content compression (redundant prose, near-duplicate pages, synthesis pages), which needs full-content reads and is expensive/infrequent, use brain-sleep instead.
 argument-hint: [--level daily|weekly|monthly (default: weekly)]
 allowed-tools: Read, Write, Glob, Grep, Edit, Bash
 ---
 
-# Brain Maintenance
+# Brain Consolidate
 
-The second brain compounds only if it's pruned. This skill runs the recurring cleanup cycle — the equivalent of sleep consolidation for the brain. It doesn't replace `/brain-ingest` (which adds new material) or `/brain-lint` (deep structural check). It keeps what's already there healthy and actionable.
+The second brain compounds only if it's pruned. This skill runs the recurring, cheap, structural cleanup cycle — the nightly sleep equivalent, not the deep one. It doesn't replace `/brain-ingest` (which adds new material) or `/brain-lint` (deep structural check). It keeps what's already there healthy and actionable, working only from links, frontmatter, and dates — it never reads full page bodies to judge content quality or redundancy. That's `/brain-sleep`'s job: the slow, infrequent, judgment-heavy pass that compresses bloated pages, merges near-duplicates, and drafts synthesis pages. If this skill's checks surface something that looks like a content-compression or duplication issue, note it and point to `/brain-sleep` — don't act on it here.
 
 **Always read `AGENTS.md` first**, then `log.md` (last 10 entries) to know what's changed since last maintenance.
 
@@ -49,18 +49,18 @@ All weekly checks, plus:
 
 3. **Profile.md current situation** — rewrite the "Current situation" section to reflect what's actually true now. This section decays fastest. Don't rewrite the whole file — just the situation block.
 
-4. **Tension resolution check** — for each tension in `meta/tensions.md`, ask: has enough happened (new coaching, new wiki pages, life events) that an answer is now possible? If yes, write a draft answer under `_Answer:_` in the tension entry.
+4. **Tension resolution check** — for each tension in `meta/tensions.md`, ask: has enough happened (new material, new wiki pages, life events) that an answer is now possible? If yes, write a draft answer under `_Answer:_` in the tension entry.
 
-5. **Synthesis opportunity** — look at pages added since the last monthly maintenance. Are there 2-3 pages that connect across domains in a non-obvious way? If yes, create a synthesis page in `wiki/synthesis/`.
+5. Log: `## [date] maintenance | monthly — [N pages reviewed, N tensions checked, N stale candidates]`.
 
-6. Log: `## [date] maintenance | monthly — [N pages reviewed, N tensions checked, N stale candidates]`.
+Synthesis-page creation (finding 2-3 pages that connect non-obviously across domains) is `/brain-sleep`'s job, not this skill's — it needs a full-content read to judge well, which is out of scope for a monthly structural pass.
 
 ---
 
 ## What to auto-fix vs. what to flag
 
 **Auto-fix (safe, do immediately):**
-- Broken link where the target page exists but the title doesn't match exactly (e.g., `[[Czas liminalny]]` → page title is `Czas liminalny - między jednym a drugim`): fix the title to match the short form used in links, not the other way around. Short = easier to link.
+- Broken link where the target page exists but the title doesn't match exactly (e.g., a link uses a shortened form of a longer page title): fix the title to match the short form used in links, not the other way around. Short = easier to link.
 - `updated` date in frontmatter older than the actual last edit (when you can verify from log.md).
 - `hot-personal.md` or `hot-system.md` references to events/pages that no longer exist.
 
@@ -69,7 +69,6 @@ All weekly checks, plus:
 - Merging two pages.
 - Updating `profile.md` current situation.
 - Writing an answer to a tension.
-- Creating synthesis pages.
 
 ---
 
@@ -89,22 +88,23 @@ Note: `profile.md`, `hot-personal.md`, and `hot-system.md` are NOT wiki pages �
 
 ---
 
-## The sleep-cycle analogy
+## The nightly-cycle analogy
 
-Human brains consolidate during sleep: strengthen important connections, weaken unused ones, compress episodic memories into schemas. This skill does the same:
+This skill is the light, frequent maintenance — checking connections and dates without reading the substance of what's stored:
 
 - **Strengthen**: add backlinks to weakly-connected but valuable pages
-- **Weaken**: flag stale, 0-backlink pages for review  
-- **Compress**: synthesis pages = schemas built from specific wiki pages
+- **Weaken**: flag stale, 0-backlink pages for review
 
-The goal is a **sharp brain, not a big one.** 62 high-quality linked pages > 200 disconnected notes.
+The deeper work — compressing bloated pages, resolving near-duplicates, building synthesis schemas — is `/brain-sleep`'s job, run less often, at higher cost.
+
+The goal is a **sharp brain, not a big one.** Fewer high-quality linked pages beat many disconnected notes.
 
 ---
 
 ## Output format
 
 ```
-## Brain Maintenance — [date] | [level]
+## Brain Consolidate — [date] | [level]
 
 **Last maintenance:** [date from log.md]
 
@@ -117,8 +117,6 @@ The goal is a **sharp brain, not a big one.** 62 high-quality linked pages > 200
 **Stale candidates (monthly only):** [list]
 
 **Tensions:** [any now answerable / any new]
-
-**Synthesis opportunity (monthly only):** [if found]
 
 **Actions taken:** [list of auto-fixes applied]
 

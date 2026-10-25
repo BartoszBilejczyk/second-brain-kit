@@ -25,7 +25,7 @@ Universal tools and skills available from `~/ai-toolkit`. Plugins `core@ai-toolk
 
 ## Cross-repo Claude memory
 
-Claude keeps a cross-repo working memory at `~/claude-memory/` (`short-term.md` + `long-term.md`), via the `memory@ai-toolkit` plugin — session digests and distilled facts spanning all repos. **This is Claude's own working memory, distinct from any second brain this kit builds** (a second brain is the *user*; this memory is *Claude*). Never mix them.
+Claude keeps a cross-repo working memory at `~/projects-memory/` (`short-term.md` + `long-term.md`), via the `memory@ai-toolkit` plugin — session digests and distilled facts spanning all repos. **This is Claude's own working memory, distinct from any second brain this kit builds** (a second brain is the *user*; this memory is *Claude*). Never mix them.
 
 - Recall recent work → `short-term-memory-read` (filtered to current repo; ask to widen).
 - Save the session → `short-term-memory-write`.

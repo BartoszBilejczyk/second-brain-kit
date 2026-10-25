@@ -31,7 +31,8 @@ Once the wiki exists, every project you run through Claude can be grounded in yo
 | `/brain-log` | Log what was ingested and what changed |
 | `/brain-review` | Quality audit after an ingest |
 | `/brain-lint` | Structural health check: broken links, orphans, weak connections |
-| `/brain-maintenance` | Recurring upkeep, staleness check, tension resolution |
+| `/brain-consolidate` | Recurring upkeep, staleness check, tension resolution |
+| `/brain-sleep` | Deep, infrequent pass: compress bloated pages, merge duplicates, propose synthesis |
 | `/brain-retrospective` | System meta-audit, skill improvement proposals |
 
 ---
