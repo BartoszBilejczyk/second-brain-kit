@@ -9,5 +9,5 @@ sentence-transformers>=5.0
 
 # PyTorch: required by sentence-transformers and whisper (~700MB)
 # If you don't have an NVIDIA GPU, install the smaller CPU-only wheel instead:
-#   pip install torch>=2.9 --index-url https://download.pytorch.org/whl/cpu
-torch>=2.9
+#   pip install torch>=2.13 --index-url https://download.pytorch.org/whl/cpu
+torch>=2.13
