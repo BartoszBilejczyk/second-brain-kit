@@ -9,7 +9,7 @@ This script:
   1. Checks Python >= 3.13
   2. Creates a .venv virtual environment if not already in one
   3. Asks 4 questions to configure your brain
-  4. Writes the ## User section to CLAUDE.md
+  4. Writes the ## User section to AGENTS.md
   5. Writes a starter profile.md
   6. Updates .gitignore based on your recordings privacy choice
   7. Warns you about download sizes
@@ -26,7 +26,7 @@ from pathlib import Path
 from datetime import date
 
 REPO_ROOT = Path(__file__).parent.parent
-CLAUDE_MD = REPO_ROOT / "CLAUDE.md"
+AGENTS_MD = REPO_ROOT / "AGENTS.md"  # CLAUDE.md only imports it
 PROFILE_MD = REPO_ROOT / "profile.md"
 GITIGNORE = REPO_ROOT / ".gitignore"
 REQUIREMENTS = REPO_ROOT / "tools" / "requirements.txt"
@@ -75,28 +75,28 @@ def ask(prompt: str, default: str = "") -> str:
 
 
 def get_current_user_name() -> str:
-    """Return the current Name/alias from CLAUDE.md, or empty string if default/missing."""
+    """Return the current Name/alias from AGENTS.md, or empty string if default/missing."""
     try:
-        content = CLAUDE_MD.read_text(encoding="utf-8")
+        content = AGENTS_MD.read_text(encoding="utf-8")
         match = re.search(r"^Name/alias:\s*(.+)$", content, re.MULTILINE)
         if match:
             name = match.group(1).strip()
-            return "" if name == "User" else name
+            return "" if name in ("User", "(set by /brain-setup)") else name
     except FileNotFoundError:
         pass
     return ""
 
 
 def write_user_section(name: str, goal: str, language: str):
-    """Update the ## User section in CLAUDE.md."""
-    content = CLAUDE_MD.read_text(encoding="utf-8")
+    """Update the ## User section in AGENTS.md."""
+    content = AGENTS_MD.read_text(encoding="utf-8")
 
     new_section = (
         f"## User\n\n"
         f"Name/alias: {name}\n"
         f"Goal: {goal}\n"
         f"Language: {language}\n\n"
-        f"*(This section is written by `/brain-setup` during onboarding. Update it any time.)*"
+        f"*(This section is written by `/brain-setup` during onboarding. Update it any time.)*\n"
     )
 
     # Match ## User section up to the next --- or ## heading
@@ -113,8 +113,8 @@ def write_user_section(name: str, goal: str, language: str):
             lines.append("\n" + new_section)
         new_content = "\n".join(lines)
 
-    CLAUDE_MD.write_text(new_content, encoding="utf-8")
-    print(f"  ✓ CLAUDE.md updated with your profile")
+    AGENTS_MD.write_text(new_content, encoding="utf-8")
+    print(f"  ✓ AGENTS.md updated with your profile")
 
 
 def write_starter_profile(name: str, goal: str):

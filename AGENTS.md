@@ -1,6 +1,6 @@
 # Second Brain — Agent Constitution
 
-Full guide for AI assistants working in this vault. All tools (Claude Code, Codex CLI, Gemini CLI, etc.) read this file for the complete operating rules.
+Full guide for AI assistants working in this vault. All tools (Claude Code, Codex CLI, Gemini CLI, etc.) read this file for the complete operating rules. `CLAUDE.md` only imports it (`@AGENTS.md`); edit this file, never `CLAUDE.md`.
 
 ---
 
@@ -393,6 +393,13 @@ Depth pages in `wiki/voice-profile/` provide the full detail:
 python tools/build-graph.py          # rebuild wiki-graph.json
 python tools/embed-wiki.py           # incremental re-embed (only changed pages, ~3s)
 ```
+
+---
+
+## Secrets and changing the kit
+
+- **Never read, print or log files that hold secrets** (`.env`, `.pem`, config files with keys or credentials). Verify a configuration without reading its contents; if that is not possible, ask the user to check it.
+- **Think holistically before changing anything.** Skills reference each other, this file references skills, `wiki-check.py` is used by `brain-lint`, `brain-setup` feeds `brain-language`. Update every related file in the same change; never leave docs describing old behaviour.
 
 ---
 
