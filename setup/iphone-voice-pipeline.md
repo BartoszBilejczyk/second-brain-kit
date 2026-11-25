@@ -49,9 +49,9 @@ To add more destinations (e.g. project notes): duplicate the shortcut, change th
 
 ## Step 2 — VoiceWatcher daemon on Mac
 
-The daemon lives in `~/ai-toolkit/tools/voice-watcher/`. Full details in its README:
+The daemon lives in `~/ai-toolkit/tools/voice-watcher/`. Full details in its AGENTS.md:
 ```
-~/ai-toolkit/tools/voice-watcher/README.md
+~/ai-toolkit/tools/voice-watcher/AGENTS.md
 ```
 
 Quick setup:
